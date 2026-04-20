@@ -377,7 +377,7 @@ async function getPrice(ticker){
 async function executeTrade(ticker,action,reason,signalId){
   if(portfolio.executedSignals.has(signalId)) return;
   const price=await getPrice(ticker);
-  if(!price){alert(`Could not fetch price for ${ticker}. Try again when market is open.`);return;}
+  if(!price){setStatus(`No price for ${ticker} - market closed?`);return;}
 
   const posSize=100; // $100 per trade
   if(action==='BUY'){
@@ -420,7 +420,7 @@ async function sellPosition(ticker){
   const pos=portfolio.positions[ticker];
   if(!pos) return;
   const price=await getPrice(ticker);
-  if(!price){alert(`Could not fetch price for ${ticker}.`);return;}
+  if(!price){setStatus(`No price for ${ticker} - market closed?`);return;}
   const proceeds=pos.shares*price;
   const pnl=proceeds-(pos.shares*pos.avgPrice);
   portfolio.cash+=proceeds;
