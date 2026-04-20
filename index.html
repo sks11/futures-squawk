@@ -196,7 +196,37 @@
   .screener-stat-val{font-size:16px;font-weight:800;color:var(--cyan);}
   .screener-stat-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
   .disclaimer{font-size:8px;color:var(--text-muted);padding:8px 12px;text-align:center;opacity:0.6;}
-  @media(max-width:1000px){.main{grid-template-columns:1fr;}.sidebar{display:none;}}
+  /* ── Mobile Toggle ── */
+  .mobile-toggle{display:none;position:fixed;bottom:16px;right:16px;z-index:100;width:50px;height:50px;border-radius:50%;background:var(--cyan);color:var(--bg-primary);border:none;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 4px 15px rgba(6,182,212,0.4);font-family:inherit;}
+  .mobile-toggle:active{transform:scale(0.95);}
+
+  @media(max-width:1000px){
+    body{overflow:auto;height:auto;}
+    .header{flex-wrap:wrap;gap:6px;}
+    .header-left{min-width:0;}.subtitle{display:none;}
+    .header-right{gap:6px;flex-wrap:wrap;}
+    .status-text{display:none;}
+    .ticker-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 8px;}
+    .ticker-item{padding:3px 8px;}.ticker-symbol{font-size:11px;}.ticker-price{font-size:11px;}.ticker-change{font-size:9px;}
+    .sentiment-bar{flex-wrap:wrap;gap:8px;padding:6px 12px;}
+    .filter-bar{padding:4px 8px;gap:4px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;}
+    .filter-tab{padding:4px 10px;font-size:10px;white-space:nowrap;flex-shrink:0;}
+    .main{display:flex;flex-direction:column;height:auto;overflow:visible;}
+    .news-feed{max-height:50vh;overflow-y:auto;}
+    .news-header{grid-template-columns:50px 1fr;gap:6px;}.news-header span:nth-child(2),.news-header span:nth-child(3),.news-header span:nth-child(4){display:none;}
+    .news-item{grid-template-columns:50px 1fr;gap:6px;padding:6px 8px;}
+    .news-source,.news-category,.news-sentiment{display:none;}
+    .news-headline{font-size:11px;}
+    .news-time{font-size:10px;}
+    .sidebar{border-left:none;border-top:1px solid var(--border);display:flex;overflow-y:visible;}
+    .sidebar-tabs{position:sticky;top:0;z-index:10;}
+    .sidebar-tab{font-size:9px;padding:6px 4px;letter-spacing:0;}
+    .sidebar-panel.active{overflow-y:visible;}
+    .trade-row{grid-template-columns:45px 40px 35px 45px 45px 40px;font-size:9px;gap:2px;}
+    .mobile-toggle{display:block;}
+    .portfolio-summary{grid-template-columns:1fr 1fr;}
+    .screener-summary{grid-template-columns:1fr 1fr 1fr;}
+  }
 </style>
 </head>
 <body>
@@ -1009,6 +1039,21 @@ setInterval(async()=>{
   recordSnapshot();savePortfolio();renderPortfolio();
   if(portfolio.pendingQueue.length)retryPendingTrades();
 },120000);
+// Mobile: scroll between news and sidebar
+document.getElementById('mobileToggle').addEventListener('click',()=>{
+  const sidebar=document.querySelector('.sidebar');
+  const feed=document.querySelector('.news-feed');
+  if(sidebar.style.display==='none'){
+    sidebar.style.display='flex';
+    feed.style.display='none';
+    document.getElementById('mobileToggle').textContent='N';
+  } else {
+    sidebar.style.display='none';
+    feed.style.display='block';
+    document.getElementById('mobileToggle').textContent='S';
+  }
+});
 </script>
+<button class="mobile-toggle" id="mobileToggle" title="Toggle News/Sidebar">S</button>
 </body>
 </html>
