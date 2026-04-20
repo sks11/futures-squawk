@@ -385,13 +385,10 @@
 // ══════════════════════════════════════
 const FEEDS=[
   {name:'CNBC',url:'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114'},
-  {name:'CNBC Mkt',url:'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147'},
   {name:'MarketWatch',url:'https://feeds.marketwatch.com/marketwatch/topstories/'},
-  {name:'MW Pulse',url:'https://feeds.marketwatch.com/marketwatch/marketpulse/'},
   {name:'WSJ Mkts',url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml'},
   {name:'G-News Mkt',url:'https://news.google.com/rss/search?q=stock+market+OR+futures+OR+wall+street&hl=en-US&gl=US&ceid=US:en'},
   {name:'G-News Geo',url:'https://news.google.com/rss/search?q=geopolitical+OR+iran+OR+china+trade+OR+sanctions&hl=en-US&gl=US&ceid=US:en'},
-  {name:'Reuters',url:'https://feeds.reuters.com/reuters/businessNews'},
 ];
 const TRUMP_FEEDS=[
   {name:'Trump Post',url:'https://news.google.com/rss/search?q=%22trump+says%22+OR+%22trump+posts%22+OR+%22trump+truth+social%22&hl=en-US&gl=US&ceid=US:en'},
@@ -401,11 +398,9 @@ const TRUMP_FEEDS=[
 const SCREENER_FEEDS=[
   {name:'Reddit WSB',src:'reddit',url:'https://www.reddit.com/r/wallstreetbets/hot.rss'},
   {name:'Reddit Stocks',src:'reddit',url:'https://www.reddit.com/r/stocks/hot.rss'},
-  {name:'Reddit Options',src:'reddit',url:'https://www.reddit.com/r/options/hot.rss'},
   {name:'Pre-Mkt',src:'premarket',url:'https://news.google.com/rss/search?q=premarket+movers+OR+%22stocks+to+watch%22+OR+%22pre-market%22+movers&hl=en-US&gl=US&ceid=US:en'},
-  {name:'Volume',src:'news',url:'https://news.google.com/rss/search?q=%22unusual+volume%22+OR+%22volume+spike%22+OR+%22most+active+stocks%22&hl=en-US&gl=US&ceid=US:en'},
-  {name:'Momentum',src:'news',url:'https://news.google.com/rss/search?q=stock+breakout+OR+stock+momentum+OR+%22stocks+moving%22+OR+%22trending+stocks%22&hl=en-US&gl=US&ceid=US:en'},
-  {name:'Social Buzz',src:'social',url:'https://news.google.com/rss/search?q=wallstreetbets+OR+%22meme+stock%22+OR+%22retail+investors%22+OR+%22short+squeeze%22&hl=en-US&gl=US&ceid=US:en'},
+  {name:'Momentum',src:'news',url:'https://news.google.com/rss/search?q=%22unusual+volume%22+OR+stock+breakout+OR+%22trending+stocks%22+OR+%22short+squeeze%22&hl=en-US&gl=US&ceid=US:en'},
+  {name:'Social Buzz',src:'social',url:'https://news.google.com/rss/search?q=wallstreetbets+OR+%22meme+stock%22+OR+%22retail+investors%22&hl=en-US&gl=US&ceid=US:en'},
 ];
 const SYMBOLS=['QQQ','SPY','IWM','DIA','UVXY','TLT','GLD'];
 const RSS2JSON='https://api.rss2json.com/v1/api.json?rss_url=';
@@ -1029,10 +1024,10 @@ fetchAllNews();fetchMarketData();fetchForexCalendar();fetchScreenerFeeds();
 renderPortfolio();
 // Retry any pending trades from previous session
 setTimeout(()=>{if(portfolio.pendingQueue.length)retryPendingTrades();},5000);
-setInterval(fetchAllNews,60000);
-setInterval(fetchMarketData,30000);
-setInterval(fetchForexCalendar,300000);
-setInterval(fetchScreenerFeeds,120000); // Screener every 2 min
+setInterval(fetchAllNews,120000);       // News every 2 min
+setInterval(fetchMarketData,60000);     // Prices every 1 min
+setInterval(fetchForexCalendar,300000); // Calendar every 5 min
+setInterval(fetchScreenerFeeds,300000); // Screener every 5 min
 // Update portfolio values + retry pending trades every 2 min
 setInterval(async()=>{
   for(const t of Object.keys(portfolio.positions)){await getPrice(t);}
