@@ -261,6 +261,31 @@
   .period-tabs{display:flex;gap:4px;margin-bottom:8px;}
   .period-tab{padding:3px 8px;border-radius:3px;font-size:9px;font-weight:700;cursor:pointer;background:var(--bg-card);color:var(--text-muted);border:1px solid var(--border);font-family:inherit;}
   .period-tab.active{background:var(--cyan);color:var(--bg-primary);border-color:var(--cyan);}
+  /* ── AI Chat ── */
+  .pro-gate{padding:20px;text-align:center;}
+  .pro-gate input{background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-family:inherit;font-size:13px;width:140px;text-align:center;text-transform:uppercase;letter-spacing:2px;}
+  .pro-gate input::placeholder{color:var(--text-muted);text-transform:none;letter-spacing:0;}
+  .pro-gate-msg{font-size:10px;color:var(--text-muted);margin-top:8px;}
+  .api-key-input{display:flex;gap:6px;margin-bottom:10px;}
+  .api-key-input input{flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:6px 10px;border-radius:4px;font-family:inherit;font-size:10px;}
+  .api-key-input select{background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:6px;border-radius:4px;font-family:inherit;font-size:10px;}
+  .chat-messages{max-height:400px;overflow-y:auto;margin-bottom:8px;}
+  .chat-messages::-webkit-scrollbar{width:4px;}.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  .chat-msg{padding:8px 10px;margin-bottom:6px;border-radius:6px;font-size:11px;line-height:1.5;}
+  .chat-msg.user{background:rgba(6,182,212,0.1);border-left:3px solid var(--cyan);color:var(--text-primary);}
+  .chat-msg.ai{background:var(--bg-card);border-left:3px solid var(--green);color:var(--text-secondary);}
+  .chat-msg.ai b{color:var(--text-primary);}
+  .chat-msg.error{background:rgba(239,68,68,0.1);border-left:3px solid var(--red);color:var(--red);}
+  .chat-msg.loading{color:var(--text-muted);font-style:italic;}
+  .chat-input-row{display:flex;gap:6px;}
+  .chat-input{flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:inherit;font-size:11px;outline:none;}
+  .chat-input:focus{border-color:var(--cyan);}
+  .chat-send{background:var(--cyan);color:var(--bg-primary);border:none;padding:8px 14px;border-radius:6px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;}
+  .chat-send:hover{opacity:0.8;}
+  .chat-send:disabled{opacity:0.4;cursor:default;}
+  .chat-suggestions{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+  .chat-sug{font-size:9px;padding:3px 8px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;font-family:inherit;}
+  .chat-sug:hover{border-color:var(--cyan);color:var(--cyan);}
   .disclaimer{font-size:8px;color:var(--text-muted);padding:8px 12px;text-align:center;opacity:0.6;}
   /* ── Mobile Toggle ── */
   .mobile-toggle{display:none;position:fixed;bottom:16px;right:16px;z-index:100;width:50px;height:50px;border-radius:50%;background:var(--cyan);color:var(--bg-primary);border:none;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 4px 15px rgba(6,182,212,0.4);font-family:inherit;}
@@ -348,6 +373,7 @@
       <button class="sidebar-tab" data-panel="portfolio">PORTFOLIO</button>
       <button class="sidebar-tab" data-panel="screener">SCREENER</button>
       <button class="sidebar-tab" data-panel="smartmoney">SMART $</button>
+      <button class="sidebar-tab" data-panel="aichat">AI CHAT</button>
       <button class="sidebar-tab" data-panel="info">INFO</button>
     </div>
 
@@ -462,6 +488,37 @@
       <div class="sidebar-section">
         <div class="sidebar-title">&#128293; EARLY INNINGS — TOP PICKS</div>
         <div id="earlyInnings"><div class="no-data">Analyzing smart money convergence...</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ AI CHAT PANEL ═══ -->
+    <div class="sidebar-panel" id="panel-aichat">
+      <div class="sidebar-section" id="proChatGate">
+        <div class="pro-gate">
+          <div style="font-size:20px;margin-bottom:8px;">&#128274;</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">PRO FEATURE</div>
+          <input type="text" id="proCodeInput" placeholder="Enter code" maxlength="10" autocomplete="off">
+          <div class="pro-gate-msg">Type the access code to unlock AI Chat</div>
+        </div>
+      </div>
+      <div class="sidebar-section" id="proChatUnlocked" style="display:none;flex:1;display:none;flex-direction:column;">
+        <div class="sidebar-title">&#129302; AI STOCK ANALYST</div>
+        <div class="api-key-input">
+          <input type="password" id="geminiKey" placeholder="Gemini API key (free at aistudio.google.com)">
+          <button class="btn-sm" id="saveKeyBtn">SAVE</button>
+        </div>
+        <div class="chat-suggestions">
+          <button class="chat-sug" onclick="askChat('NFLX what happened?')">NFLX what happened?</button>
+          <button class="chat-sug" onclick="askChat('NOW earnings prediction?')">NOW earnings?</button>
+          <button class="chat-sug" onclick="askChat('Best stocks to buy today?')">Best buys today?</button>
+          <button class="chat-sug" onclick="askChat('Is it a good time to buy the dip?')">Buy the dip?</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-row">
+          <input type="text" class="chat-input" id="chatInput" placeholder="Ask about any stock, earnings, market..." autocomplete="off">
+          <button class="chat-send" id="chatSendBtn" onclick="sendChat()">ASK</button>
+        </div>
+        <div class="disclaimer" style="margin-top:6px;">Powered by Gemini 2.5 Flash-Lite. Not financial advice.</div>
       </div>
     </div>
 
@@ -1635,6 +1692,124 @@ setInterval(async()=>{
   recordSnapshot();savePortfolio();renderPortfolio();
   if(portfolio.pendingQueue.length)retryPendingTrades();
 },120000);
+// ══════════════════════════════════════
+//  AI CHAT (Gemini 2.5 Flash-Lite)
+// ══════════════════════════════════════
+const PRO_CODE='PRO';
+let geminiKey='';
+let chatHistory=[];
+
+// PRO gate
+document.getElementById('proCodeInput').addEventListener('keyup',function(e){
+  if(this.value.toUpperCase()===PRO_CODE){
+    document.getElementById('proChatGate').style.display='none';
+    const unlocked=document.getElementById('proChatUnlocked');
+    unlocked.style.display='flex';
+    // Load saved key
+    const saved=localStorage.getItem('squawk_gemini_key');
+    if(saved){geminiKey=saved;document.getElementById('geminiKey').value='••••••••••';addChatMsg('ai','API key loaded. Ask me anything about stocks, earnings, or markets!');}
+  }
+});
+
+// Save API key
+document.getElementById('saveKeyBtn').addEventListener('click',()=>{
+  const key=document.getElementById('geminiKey').value.trim();
+  if(key&&!key.startsWith('••')){
+    geminiKey=key;
+    localStorage.setItem('squawk_gemini_key',key);
+    document.getElementById('geminiKey').value='••••••••••';
+    addChatMsg('ai','API key saved! Ask me anything.');
+  }
+});
+
+// Chat input enter key
+document.getElementById('chatInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}
+});
+
+function askChat(q){
+  document.getElementById('chatInput').value=q;
+  sendChat();
+}
+
+function addChatMsg(type,text){
+  const el=document.getElementById('chatMessages');
+  const div=document.createElement('div');
+  div.className='chat-msg '+type;
+  div.innerHTML=text;
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+  return div;
+}
+
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const q=input.value.trim();
+  if(!q)return;
+  if(!geminiKey){addChatMsg('error','Please enter your Gemini API key first. Get one free at aistudio.google.com');return;}
+
+  input.value='';
+  addChatMsg('user',q);
+  const loadingDiv=addChatMsg('loading','Analyzing...');
+  document.getElementById('chatSendBtn').disabled=true;
+
+  // Build context from dashboard data
+  const recentHeadlines=headlines.slice(0,15).map(h=>`[${h.sentiment}] ${h.title}`).join('\n');
+  const trumpRecent=trumpPosts.slice(0,5).map(p=>p.title).join('\n');
+  const topScreener=screenerData.slice(0,5).map(s=>`${s.ticker}: buzz ${s.buzzScore}, ${s.mentions} mentions`).join('\n');
+  const positions=Object.entries(portfolio.positions).map(([t,p])=>`${t}: ${p.shares} shares @ $${p.avgPrice.toFixed(2)}`).join(', ');
+
+  const systemPrompt=`You are a stock market analyst AI embedded in a trading dashboard called FuturesSquawk. Be concise, specific, and actionable. Use bullet points. Always mention specific tickers. Give a clear BUY/SELL/HOLD opinion when asked. Include risk warnings.
+
+CURRENT DASHBOARD DATA:
+Recent Headlines:
+${recentHeadlines||'No headlines loaded yet'}
+
+Trump/Political Posts:
+${trumpRecent||'None recent'}
+
+Trending Momentum Stocks:
+${topScreener||'None detected'}
+
+User Portfolio: Cash $${portfolio.cash.toFixed(0)}, Positions: ${positions||'None'}
+
+Answer in 3-5 concise bullet points. Be direct.`;
+
+  try{
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${geminiKey}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{parts:[{text:systemPrompt+'\n\nUser question: '+q}]}],
+        generationConfig:{maxOutputTokens:500,temperature:0.7}
+      })
+    });
+
+    if(!resp.ok){
+      const err=await resp.json().catch(()=>({}));
+      throw new Error(err.error?.message||`API error ${resp.status}`);
+    }
+
+    const data=await resp.json();
+    const answer=data.candidates?.[0]?.content?.parts?.[0]?.text||'No response received.';
+
+    // Format: convert markdown-like to HTML
+    const formatted=answer
+      .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
+      .replace(/\*(.*?)\*/g,'<i>$1</i>')
+      .replace(/^- /gm,'&bull; ')
+      .replace(/^• /gm,'&bull; ')
+      .replace(/\n/g,'<br>');
+
+    loadingDiv.remove();
+    addChatMsg('ai',formatted);
+  }catch(e){
+    loadingDiv.remove();
+    addChatMsg('error','Error: '+e.message);
+  }
+  document.getElementById('chatSendBtn').disabled=false;
+}
+
 // Mobile: scroll between news and sidebar
 document.getElementById('mobileToggle').addEventListener('click',()=>{
   const sidebar=document.querySelector('.sidebar');
