@@ -22,237 +22,190 @@
     --orange: #f97316;
     --cyan: #06b6d4;
   }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
+  * { margin:0; padding:0; box-sizing:border-box; }
   body {
-    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-size: 13px;
-    overflow: hidden;
-    height: 100vh;
+    font-family: 'SF Mono','Fira Code','Cascadia Code','Consolas',monospace;
+    background: var(--bg-primary); color: var(--text-primary);
+    font-size: 13px; overflow: hidden; height: 100vh;
   }
 
   /* ── Header ── */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 16px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
-  }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .status-dot {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 8px var(--green);
-    animation: pulse 2s infinite;
-  }
-  .status-dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .header { display:flex; align-items:center; justify-content:space-between; padding:8px 16px; background:var(--bg-secondary); border-bottom:1px solid var(--border); }
+  .header-left { display:flex; align-items:center; gap:12px; }
+  .status-dot { width:10px; height:10px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 2s infinite; }
+  .status-dot.error { background:var(--red); box-shadow:0 0 8px var(--red); }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-  .logo { font-size: 16px; font-weight: 800; letter-spacing: 1px; }
-  .logo span { color: var(--yellow); }
-  .subtitle { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
-  .header-right { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--text-secondary); }
-  .headline-count { color: var(--cyan); }
-  .btn-sm {
-    background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary);
-    padding: 4px 10px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 11px;
-  }
-  .btn-sm:hover { background: var(--bg-hover); color: var(--text-primary); }
-  .btn-sm.active { background: var(--blue); color: white; border-color: var(--blue); }
-  .status-text { font-size: 10px; color: var(--text-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .logo { font-size:16px; font-weight:800; letter-spacing:1px; }
+  .logo span { color:var(--yellow); }
+  .subtitle { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:2px; }
+  .header-right { display:flex; align-items:center; gap:12px; font-size:12px; color:var(--text-secondary); }
+  .headline-count { color:var(--cyan); }
+  .btn-sm { background:var(--bg-card); border:1px solid var(--border); color:var(--text-secondary); padding:4px 10px; border-radius:4px; cursor:pointer; font-family:inherit; font-size:11px; }
+  .btn-sm:hover { background:var(--bg-hover); color:var(--text-primary); }
+  .btn-sm.active { background:var(--blue); color:white; border-color:var(--blue); }
+  .status-text { font-size:10px; color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
   /* ── Ticker ── */
-  .ticker-bar {
-    display: flex; align-items: center; gap: 2px; padding: 6px 16px;
-    background: var(--bg-secondary); border-bottom: 1px solid var(--border);
-    overflow-x: auto; flex-wrap: nowrap;
-  }
-  .ticker-item { display: flex; align-items: center; gap: 8px; padding: 4px 12px; white-space: nowrap; border-right: 1px solid var(--border); }
-  .ticker-item:last-child { border-right: none; }
-  .ticker-symbol { font-weight: 700; color: var(--text-primary); font-size: 12px; }
-  .ticker-price { font-weight: 600; font-size: 13px; }
-  .ticker-change { font-size: 11px; font-weight: 600; }
-  .up { color: var(--green); }
-  .down { color: var(--red); }
-  .flat { color: var(--text-muted); }
+  .ticker-bar { display:flex; align-items:center; gap:2px; padding:6px 16px; background:var(--bg-secondary); border-bottom:1px solid var(--border); overflow-x:auto; }
+  .ticker-item { display:flex; align-items:center; gap:8px; padding:4px 12px; white-space:nowrap; border-right:1px solid var(--border); }
+  .ticker-item:last-child { border-right:none; }
+  .ticker-symbol { font-weight:700; font-size:12px; }
+  .ticker-price { font-weight:600; font-size:13px; }
+  .ticker-change { font-size:11px; font-weight:600; }
+  .up { color:var(--green); } .down { color:var(--red); } .flat { color:var(--text-muted); }
 
-  /* ── Sentiment Bar ── */
-  .sentiment-bar {
-    display: flex; align-items: center; padding: 6px 16px;
-    background: var(--bg-primary); border-bottom: 1px solid var(--border);
-    gap: 16px; font-size: 11px;
-  }
-  .sentiment-label { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
-  .bar-bg { width: 120px; height: 6px; background: var(--bg-card); border-radius: 3px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
-  .risk-block {
-    width: 14px; height: 14px; border-radius: 2px; border: 1px solid var(--border);
-    display: inline-block; transition: all 0.3s;
-  }
-  .risk-block.g { background: var(--green); border-color: var(--green); }
-  .risk-block.y { background: var(--yellow); border-color: var(--yellow); }
-  .risk-block.r { background: var(--red); border-color: var(--red); }
+  /* ── Sentiment ── */
+  .sentiment-bar { display:flex; align-items:center; padding:6px 16px; background:var(--bg-primary); border-bottom:1px solid var(--border); gap:16px; font-size:11px; }
+  .sentiment-label { font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); }
+  .bar-bg { width:120px; height:6px; background:var(--bg-card); border-radius:3px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:3px; transition:width 0.5s; }
+  .risk-block { width:14px; height:14px; border-radius:2px; border:1px solid var(--border); display:inline-block; }
+  .risk-block.g { background:var(--green); border-color:var(--green); }
+  .risk-block.y { background:var(--yellow); border-color:var(--yellow); }
+  .risk-block.r { background:var(--red); border-color:var(--red); }
 
-  /* ── Filter Tabs ── */
-  .filter-bar {
-    display: flex; align-items: center; padding: 6px 16px; gap: 6px;
-    background: var(--bg-primary); border-bottom: 1px solid var(--border); flex-wrap: wrap;
-  }
-  .filter-tab {
-    padding: 5px 14px; border-radius: 4px; font-size: 11px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer;
-    border: 1px solid transparent; font-family: inherit;
-  }
-  .filter-tab.trump { background: #7c2d12; color: #fb923c; }
-  .filter-tab.trump:hover, .filter-tab.trump.active { background: #9a3412; border-color: #fb923c; }
-  .filter-tab.fed { background: #1e3a5f; color: #60a5fa; }
-  .filter-tab.fed:hover, .filter-tab.fed.active { background: #1e40af; border-color: #60a5fa; }
-  .filter-tab.econ { background: #365314; color: #86efac; }
-  .filter-tab.econ:hover, .filter-tab.econ.active { background: #3f6212; border-color: #86efac; }
-  .filter-tab.geopolitical { background: #4c1d95; color: #c4b5fd; }
-  .filter-tab.geopolitical:hover, .filter-tab.geopolitical.active { background: #5b21b6; border-color: #c4b5fd; }
-  .filter-tab.earnings { background: #713f12; color: #fde047; }
-  .filter-tab.earnings:hover, .filter-tab.earnings.active { background: #854d0e; border-color: #fde047; }
-  .filter-tab.overall { background: var(--bg-card); color: var(--text-secondary); }
-  .filter-tab.overall:hover, .filter-tab.overall.active { background: var(--bg-hover); border-color: var(--text-secondary); }
-  .clear-filters { margin-left: auto; font-size: 11px; color: var(--text-muted); cursor: pointer; border: none; background: none; font-family: inherit; }
-  .clear-filters:hover { color: var(--text-primary); }
+  /* ── Filters ── */
+  .filter-bar { display:flex; align-items:center; padding:6px 16px; gap:6px; background:var(--bg-primary); border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .filter-tab { padding:5px 14px; border-radius:4px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; border:1px solid transparent; font-family:inherit; }
+  .filter-tab.trump { background:#7c2d12; color:#fb923c; }
+  .filter-tab.trump:hover,.filter-tab.trump.active { background:#9a3412; border-color:#fb923c; }
+  .filter-tab.fed { background:#1e3a5f; color:#60a5fa; }
+  .filter-tab.fed:hover,.filter-tab.fed.active { background:#1e40af; border-color:#60a5fa; }
+  .filter-tab.econ { background:#365314; color:#86efac; }
+  .filter-tab.econ:hover,.filter-tab.econ.active { background:#3f6212; border-color:#86efac; }
+  .filter-tab.geopolitical { background:#4c1d95; color:#c4b5fd; }
+  .filter-tab.geopolitical:hover,.filter-tab.geopolitical.active { background:#5b21b6; border-color:#c4b5fd; }
+  .filter-tab.earnings { background:#713f12; color:#fde047; }
+  .filter-tab.earnings:hover,.filter-tab.earnings.active { background:#854d0e; border-color:#fde047; }
+  .filter-tab.overall { background:var(--bg-card); color:var(--text-secondary); }
+  .filter-tab.overall:hover,.filter-tab.overall.active { background:var(--bg-hover); border-color:var(--text-secondary); }
+  .clear-filters { margin-left:auto; font-size:11px; color:var(--text-muted); cursor:pointer; border:none; background:none; font-family:inherit; }
 
   /* ── Main Layout ── */
-  .main {
-    display: grid; grid-template-columns: 1fr 340px;
-    height: calc(100vh - 158px); overflow: hidden;
-  }
+  .main { display:grid; grid-template-columns:1fr 380px; height:calc(100vh - 158px); overflow:hidden; }
 
   /* ── News Feed ── */
-  .news-feed { overflow-y: auto; padding: 0; }
-  .news-feed::-webkit-scrollbar { width: 6px; }
-  .news-feed::-webkit-scrollbar-track { background: var(--bg-primary); }
-  .news-feed::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .news-feed { overflow-y:auto; }
+  .news-feed::-webkit-scrollbar { width:6px; }
+  .news-feed::-webkit-scrollbar-track { background:var(--bg-primary); }
+  .news-feed::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+  .news-header { display:grid; grid-template-columns:70px 80px 100px 90px 1fr; gap:10px; padding:6px 12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); border-bottom:2px solid var(--border); background:var(--bg-secondary); position:sticky; top:0; z-index:10; }
+  .news-item { display:grid; grid-template-columns:70px 80px 100px 90px 1fr; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--border); }
+  .news-item:hover { background:var(--bg-hover); }
 
-  .news-header {
-    display: grid; grid-template-columns: 70px 80px 100px 90px 1fr;
-    gap: 10px; padding: 6px 12px; font-size: 10px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);
-    border-bottom: 2px solid var(--border); background: var(--bg-secondary);
-    position: sticky; top: 0; z-index: 10;
-  }
-
-  .news-item {
-    display: grid; grid-template-columns: 70px 80px 100px 90px 1fr;
-    align-items: center; gap: 10px; padding: 8px 12px;
-    border-bottom: 1px solid var(--border); cursor: default;
-  }
-  .news-item:hover { background: var(--bg-hover); }
-
-  /* Trump alert highlighting */
-  .news-item.trump-alert {
-    background: rgba(249, 115, 22, 0.12);
-    border-left: 4px solid var(--orange);
-    box-shadow: inset 0 0 30px rgba(249, 115, 22, 0.06);
-    position: relative;
-  }
-  .news-item.trump-alert::before {
-    content: "TRUMP POST";
-    position: absolute; top: 2px; right: 8px;
-    font-size: 8px; font-weight: 800; color: #fb923c;
-    background: rgba(124, 45, 18, 0.8); padding: 1px 6px;
-    border-radius: 2px; letter-spacing: 1px;
-    animation: trumpPulse 2s ease-in-out infinite;
-  }
-  .news-item.trump-alert .news-headline { color: #fed7aa; font-weight: 600; }
-  .news-item.trump-new { animation: trumpFlash 4s ease; }
-  @keyframes trumpFlash {
-    0% { background: rgba(249,115,22,0.35); box-shadow: inset 0 0 40px rgba(249,115,22,0.15), 0 0 15px rgba(249,115,22,0.1); }
-    100% { background: rgba(249,115,22,0.12); }
-  }
+  /* Trump highlighting */
+  .news-item.trump-alert { background:rgba(249,115,22,0.12); border-left:4px solid var(--orange); box-shadow:inset 0 0 30px rgba(249,115,22,0.06); position:relative; }
+  .news-item.trump-alert::before { content:"TRUMP"; position:absolute; top:2px; right:8px; font-size:8px; font-weight:800; color:#fb923c; background:rgba(124,45,18,0.8); padding:1px 6px; border-radius:2px; letter-spacing:1px; animation:trumpPulse 2s infinite; }
+  .news-item.trump-alert .news-headline { color:#fed7aa; font-weight:600; }
+  .news-item.trump-new { animation:trumpFlash 4s ease; }
+  @keyframes trumpFlash { 0%{background:rgba(249,115,22,0.35)} 100%{background:rgba(249,115,22,0.12)} }
   @keyframes trumpPulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
-
-  .news-item.breaking {
-    background: rgba(239,68,68,0.08); border-left: 3px solid var(--red);
-    animation: breakingFlash 3s ease;
-  }
+  .news-item.breaking { background:rgba(239,68,68,0.08); border-left:3px solid var(--red); animation:breakingFlash 3s ease; }
   @keyframes breakingFlash { 0%{background:rgba(239,68,68,0.2)} 100%{background:rgba(239,68,68,0.08)} }
 
-  .news-time { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-  .news-source { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .news-category { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; text-align: center; white-space: nowrap; }
-  .cat-trump { background: #7c2d12; color: #fb923c; }
-  .cat-fed { background: #1e3a5f; color: #60a5fa; }
-  .cat-econ { background: #365314; color: #86efac; }
-  .cat-geopolitical { background: #4c1d95; color: #c4b5fd; }
-  .cat-earnings { background: #713f12; color: #fde047; }
-  .cat-general { background: var(--bg-card); color: var(--text-muted); }
-
-  .news-sentiment { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; text-align: center; }
-  .sent-bullish { background: rgba(34,197,94,0.15); color: var(--green); }
-  .sent-bearish { background: rgba(239,68,68,0.15); color: var(--red); }
-  .sent-neutral { background: rgba(100,116,139,0.15); color: var(--text-muted); }
-
-  .news-headline { font-size: 12px; color: var(--text-primary); line-height: 1.4; }
-  .news-headline a { color: inherit; text-decoration: none; }
-  .news-headline a:hover { text-decoration: underline; }
+  .news-time { font-size:11px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+  .news-source { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .news-category { font-size:10px; font-weight:700; text-transform:uppercase; padding:2px 8px; border-radius:3px; text-align:center; white-space:nowrap; }
+  .cat-trump { background:#7c2d12; color:#fb923c; }
+  .cat-fed { background:#1e3a5f; color:#60a5fa; }
+  .cat-econ { background:#365314; color:#86efac; }
+  .cat-geopolitical { background:#4c1d95; color:#c4b5fd; }
+  .cat-earnings { background:#713f12; color:#fde047; }
+  .cat-general { background:var(--bg-card); color:var(--text-muted); }
+  .news-sentiment { font-size:10px; font-weight:700; text-transform:uppercase; padding:2px 8px; border-radius:3px; text-align:center; }
+  .sent-bullish { background:rgba(34,197,94,0.15); color:var(--green); }
+  .sent-bearish { background:rgba(239,68,68,0.15); color:var(--red); }
+  .sent-neutral { background:rgba(100,116,139,0.15); color:var(--text-muted); }
+  .news-headline { font-size:12px; line-height:1.4; }
+  .news-headline a { color:inherit; text-decoration:none; }
+  .news-headline a:hover { text-decoration:underline; }
 
   /* ── Sidebar ── */
-  .sidebar { border-left: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
-  .sidebar::-webkit-scrollbar { width: 6px; }
-  .sidebar::-webkit-scrollbar-track { background: var(--bg-primary); }
-  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  .sidebar-section { padding: 12px; border-bottom: 1px solid var(--border); }
-  .sidebar-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .sidebar { border-left:1px solid var(--border); overflow-y:auto; display:flex; flex-direction:column; }
+  .sidebar::-webkit-scrollbar { width:6px; }
+  .sidebar::-webkit-scrollbar-track { background:var(--bg-primary); }
+  .sidebar::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+  .sidebar-section { padding:12px; border-bottom:1px solid var(--border); }
+  .sidebar-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .sidebar-title .count { font-size:10px; color:var(--orange); margin-left:auto; }
 
-  /* Trade Ideas */
-  .trade-idea {
-    padding: 8px; margin-bottom: 6px; border-radius: 4px;
-    background: var(--bg-card); border-left: 3px solid var(--orange);
+  /* ── Trump Live Feed ── */
+  .trump-feed { max-height:220px; overflow-y:auto; }
+  .trump-feed::-webkit-scrollbar { width:4px; }
+  .trump-feed::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+  .trump-post {
+    padding:8px 10px; margin-bottom:6px; border-radius:4px;
+    background:rgba(249,115,22,0.06); border-left:3px solid var(--orange);
+    position:relative;
   }
-  .trade-idea.bullish-idea { border-left-color: var(--green); }
-  .trade-idea.bearish-idea { border-left-color: var(--red); }
-  .trade-idea-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  .trade-idea-symbol { font-weight: 700; font-size: 13px; color: var(--cyan); }
-  .trade-idea-direction { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 2px; }
-  .trade-idea-direction.bull { background: rgba(34,197,94,0.2); color: var(--green); }
-  .trade-idea-direction.bear { background: rgba(239,68,68,0.2); color: var(--red); }
-  .trade-idea-reason { font-size: 10px; color: var(--text-secondary); line-height: 1.4; }
-  .trade-idea-trigger { font-size: 9px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
-  .no-ideas { font-size: 11px; color: var(--text-muted); padding: 8px 0; }
+  .trump-post.new-post { animation:trumpPostFlash 5s ease; }
+  @keyframes trumpPostFlash { 0%{background:rgba(249,115,22,0.25); box-shadow:0 0 10px rgba(249,115,22,0.15)} 100%{background:rgba(249,115,22,0.06)} }
+  .trump-post-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+  .trump-post-source { font-size:9px; color:var(--orange); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+  .trump-post-time { font-size:9px; color:var(--text-muted); }
+  .trump-post-text { font-size:11px; color:#fed7aa; line-height:1.5; }
+  .trump-post-text a { color:#fb923c; text-decoration:none; }
+  .trump-post-text a:hover { text-decoration:underline; }
+  .trump-post-sentiment { display:inline-block; font-size:9px; font-weight:700; padding:1px 5px; border-radius:2px; margin-top:4px; }
 
-  /* Calendar */
-  .calendar-item {
-    display: grid; grid-template-columns: 55px 35px 1fr auto;
-    gap: 6px; align-items: center; padding: 6px 0;
-    border-bottom: 1px solid rgba(42,53,80,0.5); font-size: 11px;
+  /* ── Trade Signals ── */
+  .signal-card {
+    padding:10px; margin-bottom:6px; border-radius:4px;
+    background:var(--bg-card); position:relative; overflow:hidden;
   }
-  .cal-time { color: var(--text-muted); font-variant-numeric: tabular-nums; }
-  .cal-currency { font-weight: 700; color: var(--cyan); }
-  .cal-event { color: var(--text-secondary); }
-  .cal-impact { font-weight: 700; font-size: 10px; padding: 1px 6px; border-radius: 2px; }
-  .impact-high { background: rgba(239,68,68,0.2); color: var(--red); }
-  .impact-medium { background: rgba(234,179,8,0.2); color: var(--yellow); }
-  .impact-low { background: rgba(100,116,139,0.2); color: var(--text-muted); }
+  .signal-card.buy { border-left:4px solid var(--green); }
+  .signal-card.sell { border-left:4px solid var(--red); }
+  .signal-card.hold { border-left:4px solid var(--yellow); }
 
-  /* ETF Proxies */
-  .etf-list { display: flex; flex-direction: column; gap: 4px; }
-  .etf-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 11px; }
-  .etf-name { color: var(--text-muted); }
-  .etf-symbol { color: var(--cyan); font-weight: 600; }
+  .signal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+  .signal-ticker { font-weight:800; font-size:15px; color:var(--cyan); }
+  .signal-action { font-size:11px; font-weight:800; padding:2px 8px; border-radius:3px; letter-spacing:1px; }
+  .signal-action.buy-tag { background:rgba(34,197,94,0.25); color:var(--green); }
+  .signal-action.sell-tag { background:rgba(239,68,68,0.25); color:var(--red); }
+  .signal-action.hold-tag { background:rgba(234,179,8,0.25); color:var(--yellow); }
 
-  /* Market Context */
-  .market-context { padding: 10px 12px; font-size: 11px; color: var(--text-secondary); line-height: 1.5; background: var(--bg-card); border-radius: 4px; }
+  .signal-urgency { font-size:9px; font-weight:700; padding:1px 5px; border-radius:2px; margin-left:6px; }
+  .urgency-asap { background:rgba(239,68,68,0.3); color:var(--red); animation:urgencyBlink 1.5s infinite; }
+  .urgency-soon { background:rgba(249,115,22,0.3); color:var(--orange); }
+  .urgency-watch { background:rgba(100,116,139,0.3); color:var(--text-muted); }
+  @keyframes urgencyBlink { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-  /* Loading */
-  .loading-msg { text-align: center; padding: 40px; color: var(--text-muted); font-size: 12px; }
-  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 8px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .signal-reason { font-size:10px; color:var(--text-secondary); line-height:1.4; margin-bottom:4px; }
+  .signal-trigger { font-size:9px; color:var(--text-muted); font-style:italic; border-top:1px solid var(--border); padding-top:4px; margin-top:4px; }
+  .signal-confidence { font-size:9px; color:var(--text-muted); display:flex; align-items:center; gap:4px; margin-top:3px; }
+  .conf-bar { width:50px; height:4px; background:var(--bg-hover); border-radius:2px; overflow:hidden; }
+  .conf-fill { height:100%; border-radius:2px; }
 
-  @media (max-width: 900px) {
-    .main { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-    .news-item { grid-template-columns: 60px 70px 80px 70px 1fr; gap: 6px; }
+  .no-data { font-size:11px; color:var(--text-muted); padding:8px 0; }
+
+  /* ── Calendar ── */
+  .calendar-item { display:grid; grid-template-columns:55px 35px 1fr auto; gap:6px; align-items:center; padding:6px 0; border-bottom:1px solid rgba(42,53,80,0.5); font-size:11px; }
+  .cal-time { color:var(--text-muted); } .cal-currency { font-weight:700; color:var(--cyan); }
+  .cal-event { color:var(--text-secondary); }
+  .cal-impact { font-weight:700; font-size:10px; padding:1px 6px; border-radius:2px; }
+  .impact-high { background:rgba(239,68,68,0.2); color:var(--red); }
+  .impact-medium { background:rgba(234,179,8,0.2); color:var(--yellow); }
+  .impact-low { background:rgba(100,116,139,0.2); color:var(--text-muted); }
+
+  /* ── ETFs ── */
+  .etf-list { display:flex; flex-direction:column; gap:4px; }
+  .etf-item { display:flex; justify-content:space-between; padding:4px 0; font-size:11px; }
+  .etf-symbol { color:var(--cyan); font-weight:600; }
+  .etf-name { color:var(--text-muted); }
+
+  /* ── Context ── */
+  .market-context { padding:10px 12px; font-size:11px; color:var(--text-secondary); line-height:1.5; background:var(--bg-card); border-radius:4px; }
+
+  .loading-msg { text-align:center; padding:40px; color:var(--text-muted); font-size:12px; }
+  .spinner { display:inline-block; width:20px; height:20px; border:2px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin 1s linear infinite; margin-bottom:8px; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  /* ── Disclaimer ── */
+  .disclaimer { font-size:8px; color:var(--text-muted); padding:8px 12px; text-align:center; opacity:0.6; }
+
+  @media (max-width:1000px) {
+    .main { grid-template-columns:1fr; }
+    .sidebar { display:none; }
   }
 </style>
 </head>
@@ -261,10 +214,7 @@
 <div class="header">
   <div class="header-left">
     <div class="status-dot" id="statusDot"></div>
-    <div>
-      <div class="logo">FUTURES<span>SQUAWK</span></div>
-      <div class="subtitle">Real-Time Market Intelligence</div>
-    </div>
+    <div><div class="logo">FUTURES<span>SQUAWK</span></div><div class="subtitle">Real-Time Market Intelligence</div></div>
   </div>
   <div id="clock" style="font-size:12px;color:var(--text-secondary);"></div>
   <div class="header-right">
@@ -275,9 +225,7 @@
   </div>
 </div>
 
-<div class="ticker-bar" id="tickerBar">
-  <span class="flat" style="font-size:11px;padding:2px;">Loading market data...</span>
-</div>
+<div class="ticker-bar" id="tickerBar"><span class="flat" style="font-size:11px;padding:2px;">Loading market data...</span></div>
 
 <div class="sentiment-bar">
   <span class="sentiment-label">SENTIMENT:</span>
@@ -287,9 +235,7 @@
     <span style="color:var(--red);font-weight:600;" id="bearPct">--</span>
   </div>
   <span class="sentiment-label" style="margin-left:16px;">RISK:</span>
-  <div id="riskBlocks" style="display:flex;gap:3px;">
-    <div class="risk-block"></div><div class="risk-block"></div><div class="risk-block"></div><div class="risk-block"></div><div class="risk-block"></div>
-  </div>
+  <div style="display:flex;gap:3px;"><div class="risk-block"></div><div class="risk-block"></div><div class="risk-block"></div><div class="risk-block"></div><div class="risk-block"></div></div>
   <span id="overallSentiment" style="margin-left:auto;font-weight:700;font-size:12px;"></span>
 </div>
 
@@ -305,28 +251,30 @@
 
 <div class="main">
   <div class="news-feed">
-    <div class="news-header">
-      <span>TIME</span><span>SOURCE</span><span>CATEGORY</span><span>SENTIMENT</span><span>HEADLINE</span>
-    </div>
-    <div id="newsList">
-      <div class="loading-msg"><div class="spinner"></div><div>Fetching headlines...</div></div>
-    </div>
+    <div class="news-header"><span>TIME</span><span>SOURCE</span><span>CATEGORY</span><span>SENTIMENT</span><span>HEADLINE</span></div>
+    <div id="newsList"><div class="loading-msg"><div class="spinner"></div><div>Fetching headlines...</div></div></div>
   </div>
 
   <div class="sidebar">
-    <!-- Trump Trade Ideas -->
+    <!-- TRUMP LIVE -->
     <div class="sidebar-section">
-      <div class="sidebar-title">&#128293; TRUMP TRADE IDEAS</div>
-      <div id="tradeIdeas"><div class="no-ideas">Scanning headlines for trade signals...</div></div>
+      <div class="sidebar-title">&#128248; TRUMP LIVE POSTS <span class="count" id="trumpCount">0</span></div>
+      <div class="trump-feed" id="trumpFeed"><div class="no-data">Monitoring Trump statements...</div></div>
     </div>
 
-    <!-- Forex Factory -->
+    <!-- TRADE SIGNALS -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">&#9889; TRADE SIGNALS (BUY / SELL / HOLD)</div>
+      <div id="tradeSignals"><div class="no-data">Scanning for actionable signals...</div></div>
+    </div>
+
+    <!-- FOREX FACTORY -->
     <div class="sidebar-section">
       <div class="sidebar-title">&#128197; FOREX FACTORY</div>
       <div id="forexCalendar"><span class="flat" style="font-size:11px;">Loading...</span></div>
     </div>
 
-    <!-- ETF Proxies -->
+    <!-- ETF PROXIES -->
     <div class="sidebar-section">
       <div class="sidebar-title">&#128200; KEY ETF PROXIES</div>
       <div class="etf-list">
@@ -338,58 +286,68 @@
         <div class="etf-item"><span class="etf-symbol">TLT</span><span class="etf-name">ZB (Bonds)</span></div>
         <div class="etf-item"><span class="etf-symbol">GLD</span><span class="etf-name">GC (Gold)</span></div>
         <div class="etf-item"><span class="etf-symbol">USO</span><span class="etf-name">CL (Crude Oil)</span></div>
-        <div class="etf-item"><span class="etf-symbol">UUP</span><span class="etf-name">DX (US Dollar)</span></div>
       </div>
     </div>
 
-    <!-- Market Context -->
+    <!-- CONTEXT -->
     <div class="sidebar-section">
       <div class="sidebar-title">&#128161; MARKET CONTEXT</div>
       <div class="market-context" id="marketContext">Analyzing headlines...</div>
     </div>
+
+    <div class="disclaimer">Not financial advice. Signals are algorithmic and based on headline sentiment only. Always do your own research.</div>
   </div>
 </div>
 
 <script>
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 //  CONFIG
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 
 const FEEDS = [
-  { name: 'CNBC',       url: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114' },
-  { name: 'CNBC Mkt',   url: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147' },
-  { name: 'MarketWatch', url: 'https://feeds.marketwatch.com/marketwatch/topstories/' },
-  { name: 'MW Pulse',   url: 'https://feeds.marketwatch.com/marketwatch/marketpulse/' },
-  { name: 'WSJ Mkts',   url: 'https://feeds.a.dj.com/rss/RSSMarketsMain.xml' },
-  { name: 'G-News Mkt', url: 'https://news.google.com/rss/search?q=stock+market+OR+futures+OR+wall+street&hl=en-US&gl=US&ceid=US:en' },
-  { name: 'G-News Trump', url: 'https://news.google.com/rss/search?q=trump+tariff+OR+trump+market+OR+trump+trade+OR+trump+economy&hl=en-US&gl=US&ceid=US:en' },
-  { name: 'G-News Geo',  url: 'https://news.google.com/rss/search?q=geopolitical+OR+iran+OR+china+trade+OR+sanctions+OR+military&hl=en-US&gl=US&ceid=US:en' },
-  { name: 'Reuters',    url: 'https://feeds.reuters.com/reuters/businessNews' },
-  { name: 'Investing',  url: 'https://www.investing.com/rss/news.rss' },
+  { name:'CNBC', url:'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114' },
+  { name:'CNBC Mkt', url:'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147' },
+  { name:'MarketWatch', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
+  { name:'MW Pulse', url:'https://feeds.marketwatch.com/marketwatch/marketpulse/' },
+  { name:'WSJ Mkts', url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml' },
+  { name:'G-News Mkt', url:'https://news.google.com/rss/search?q=stock+market+OR+futures+OR+wall+street&hl=en-US&gl=US&ceid=US:en' },
+  { name:'G-News Geo', url:'https://news.google.com/rss/search?q=geopolitical+OR+iran+OR+china+trade+OR+sanctions+OR+military&hl=en-US&gl=US&ceid=US:en' },
+  { name:'Reuters', url:'https://feeds.reuters.com/reuters/businessNews' },
+  { name:'Investing', url:'https://www.investing.com/rss/news.rss' },
+];
+
+// Dedicated Trump feeds - multiple searches to catch everything
+const TRUMP_FEEDS = [
+  { name:'Trump Post', url:'https://news.google.com/rss/search?q=%22trump+says%22+OR+%22trump+posts%22+OR+%22trump+truth+social%22&hl=en-US&gl=US&ceid=US:en' },
+  { name:'Trump Tariff', url:'https://news.google.com/rss/search?q=trump+tariff+OR+trump+trade+OR+trump+economy+OR+trump+market&hl=en-US&gl=US&ceid=US:en' },
+  { name:'Trump Policy', url:'https://news.google.com/rss/search?q=%22trump+announces%22+OR+%22trump+threatens%22+OR+%22trump+warns%22+OR+%22trump+signs%22&hl=en-US&gl=US&ceid=US:en' },
+  { name:'Trump Action', url:'https://news.google.com/rss/search?q=%22trump+executive+order%22+OR+%22trump+truth%22+OR+%22trump+posted%22+OR+%22trump+said%22&hl=en-US&gl=US&ceid=US:en' },
 ];
 
 const SYMBOLS = ['QQQ','SPY','IWM','DIA','UVXY','TLT','GLD'];
 const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
-const ALLORIGINS = url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+const ALLORIGINS = u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`;
 
 let headlines = [];
+let trumpPosts = [];
 let seenIds = new Set();
+let seenTrumpIds = new Set();
 let activeFilter = 'all';
 let audioEnabled = false;
 let feedStatus = {};
 
-// ════════════════════════════════════════════════════
-//  SENTIMENT ENGINE
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
+//  SENTIMENT
+// ══════════════════════════════════════
 
 const BULL = ['rally','surge','gain','rise','jump','soar','bullish','positive','strong','growth','higher',
   'boost','advance','recover','recovery','optimism','upbeat','record high','all-time high','breakout',
   'upgrade','outperform','beat','beats','exceeded','above estimate','stimulus','dovish','rate cut',
-  'easing','ceasefire','peace','deal signed','agreement','rebound','uptick','climbed','climbing',
+  'easing','ceasefire','peace','deal signed','agreement','rebound','uptick','climbed',
   'buyback','dividend','strong earnings','revenue growth','profit'];
 
 const BEAR = ['crash','plunge','drop','fall','decline','sink','bearish','negative','weak','recession',
-  'lower','sell','selloff','sell-off','fear','concern','risk','war','tariff','tariffs','sanction',
+  'lower','sell','selloff','sell-off','fear','concern','war','tariff','tariffs','sanction',
   'sanctions','downgrade','miss','missed','below estimate','hawkish','rate hike','tightening',
   'inflation','crisis','collapse','slump','tumble','plummet','panic','default','debt','deficit',
   'layoff','layoffs','bankruptcy','threat','escalation','conflict','invasion','missile','attack',
@@ -397,201 +355,246 @@ const BEAR = ['crash','plunge','drop','fall','decline','sink','bearish','negativ
 
 function sentiment(text) {
   const t = text.toLowerCase();
-  let b = 0, r = 0;
-  BULL.forEach(w => { if (t.includes(w)) b += w.includes(' ') ? 2 : 1; });
-  BEAR.forEach(w => { if (t.includes(w)) r += w.includes(' ') ? 2 : 1; });
-  if (b === 0 && r === 0) return 'NEUTRAL';
-  return b > r ? 'BULLISH' : r > b ? 'BEARISH' : 'NEUTRAL';
+  let b=0, r=0;
+  BULL.forEach(w => { if(t.includes(w)) b += w.includes(' ')?2:1; });
+  BEAR.forEach(w => { if(t.includes(w)) r += w.includes(' ')?2:1; });
+  if(b===0 && r===0) return 'NEUTRAL';
+  return b>r ? 'BULLISH' : r>b ? 'BEARISH' : 'NEUTRAL';
 }
 
-// ════════════════════════════════════════════════════
-//  CATEGORY CLASSIFIER
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
+//  CATEGORY
+// ══════════════════════════════════════
 
 const CATS = {
-  trump: ['trump','truth social','maga','executive order','white house statement','president trump',
+  trump:['trump','truth social','maga','executive order','white house statement','president trump',
     'donald trump','mar-a-lago','trump admin','trump tariff','trump threaten','trump announce',
-    'trump says','trump post','trump tweet','trump truth'],
-  fed: ['fed ','federal reserve','fomc','interest rate','rate cut','rate hike','powell','monetary policy',
+    'trump says','trump post','trump tweet','trump truth','trump said','trump signed'],
+  fed:['fed ','federal reserve','fomc','interest rate','rate cut','rate hike','powell','monetary policy',
     'central bank','treasury yield','yield curve','basis points','quantitative','fed chair',
-    'fed meeting','waller','bowman','daly','bostic','kashkari','goolsbee','fed official'],
-  econ: ['gdp','jobs report','nonfarm','non-farm','employment data','unemployment','cpi','ppi',
+    'fed meeting','waller','bowman','daly','bostic','kashkari','goolsbee'],
+  econ:['gdp','jobs report','nonfarm','non-farm','employment data','unemployment','cpi','ppi',
     'inflation data','retail sales','housing starts','housing data','manufacturing','economic data',
-    'consumer confidence','ism ','pmi ','initial claims','jobless claims','payroll','trade balance',
-    'durable goods','industrial production'],
-  geopolitical: ['china','russia','iran','ukraine','taiwan','military','geopolitical','conflict',
-    'middle east','nato','trade war','sanctions','embargo','missile','nuclear','invasion','border',
-    'south china sea','north korea','gaza','israel','houthi','strait of hormuz','opec','brics',
+    'consumer confidence','ism ','pmi ','initial claims','jobless claims','payroll','trade balance'],
+  geopolitical:['china','russia','iran','ukraine','taiwan','military','geopolitical','conflict',
+    'middle east','nato','trade war','sanctions','embargo','missile','nuclear','invasion',
+    'south china sea','north korea','gaza','israel','houthi','strait of hormuz','opec',
     'ceasefire','war ','attack','bomb'],
-  earnings: ['earnings','revenue','eps','quarterly results','guidance','beat estimates',
+  earnings:['earnings','revenue','eps','quarterly results','guidance','beat estimates',
     'missed estimates','earnings call','fiscal quarter','q1 ','q2 ','q3 ','q4 ',
-    'profit margin','forward guidance','earnings season','reports earnings'],
+    'profit margin','forward guidance','earnings season'],
 };
 
 function classify(text) {
   const t = text.toLowerCase();
-  for (const [cat, kws] of Object.entries(CATS)) {
-    if (kws.some(k => t.includes(k))) return cat;
-  }
+  for(const [cat,kws] of Object.entries(CATS)) { if(kws.some(k=>t.includes(k))) return cat; }
   return 'general';
 }
 
-// ════════════════════════════════════════════════════
-//  TRUMP TRADE IDEAS ENGINE
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
+//  TRUMP POST DETECTION
+// ══════════════════════════════════════
 
-const TRUMP_TRADES = [
-  { keywords: ['china tariff','china trade','china sanction','tariff china'],
-    ideas: [
-      { symbol: 'X', dir: 'LONG', reason: 'US Steel benefits from China tariffs, domestic production demand rises' },
-      { symbol: 'NUE', dir: 'LONG', reason: 'Nucor gains from tariff protection on steel imports' },
-      { symbol: 'AAPL', dir: 'SHORT', reason: 'Apple supply chain heavily exposed to China manufacturing' },
-      { symbol: 'FXI', dir: 'SHORT', reason: 'China large-cap ETF sells off on trade escalation' },
-    ]},
-  { keywords: ['tariff','import tax','import duties','trade barrier'],
-    ideas: [
-      { symbol: 'UUP', dir: 'LONG', reason: 'Dollar strengthens on tariff-driven trade deficit reduction' },
-      { symbol: 'IWM', dir: 'LONG', reason: 'Small caps (domestic revenue) outperform on tariff news' },
-      { symbol: 'EEM', dir: 'SHORT', reason: 'Emerging markets sell off on trade uncertainty' },
-    ]},
-  { keywords: ['iran','strait of hormuz','middle east conflict','iran attack','iran missile','gulf of oman'],
-    ideas: [
-      { symbol: 'USO', dir: 'LONG', reason: 'Oil spikes on Middle East supply disruption fears' },
-      { symbol: 'XLE', dir: 'LONG', reason: 'Energy sector rallies on rising crude prices' },
-      { symbol: 'LMT', dir: 'LONG', reason: 'Lockheed Martin benefits from defense spending escalation' },
-      { symbol: 'RTX', dir: 'LONG', reason: 'Raytheon gains from missile/defense demand' },
-      { symbol: 'GLD', dir: 'LONG', reason: 'Gold surges as safe haven during geopolitical crisis' },
-      { symbol: 'XLY', dir: 'SHORT', reason: 'Consumer discretionary weakens on oil price spike fears' },
-    ]},
-  { keywords: ['fed rate cut','lower rates','dovish fed','fed easing','powell dovish'],
-    ideas: [
-      { symbol: 'QQQ', dir: 'LONG', reason: 'Tech/growth outperforms in rate-cut environment' },
-      { symbol: 'VNQ', dir: 'LONG', reason: 'REITs rally on lower borrowing costs' },
-      { symbol: 'TLT', dir: 'LONG', reason: 'Long bonds rally as yields drop on rate cut expectations' },
-    ]},
-  { keywords: ['fed rate hike','higher rates','hawkish fed','tightening','powell hawkish'],
-    ideas: [
-      { symbol: 'XLF', dir: 'LONG', reason: 'Banks benefit from wider net interest margins' },
-      { symbol: 'TLT', dir: 'SHORT', reason: 'Bond prices drop as yields rise on hawkish Fed' },
-      { symbol: 'QQQ', dir: 'SHORT', reason: 'Growth/tech underperforms in rising rate environment' },
-    ]},
-  { keywords: ['russia','ukraine','nato escalat','russia sanction'],
-    ideas: [
-      { symbol: 'LMT', dir: 'LONG', reason: 'Defense spending increases on Russia/NATO tensions' },
-      { symbol: 'NOC', dir: 'LONG', reason: 'Northrop Grumman benefits from European defense buildup' },
-      { symbol: 'UNG', dir: 'LONG', reason: 'Natural gas spikes on European energy supply concerns' },
-      { symbol: 'EWG', dir: 'SHORT', reason: 'German stocks sell off on Eastern European instability' },
-    ]},
-  { keywords: ['trump deal','trade deal','agreement signed','deal reached'],
-    ideas: [
-      { symbol: 'SPY', dir: 'LONG', reason: 'Broad market rallies on trade deal optimism' },
-      { symbol: 'EEM', dir: 'LONG', reason: 'Emerging markets recover on reduced trade friction' },
-      { symbol: 'UVXY', dir: 'SHORT', reason: 'Volatility contracts as uncertainty decreases' },
-    ]},
-  { keywords: ['tax cut','deregulat','pro-business','executive order business'],
-    ideas: [
-      { symbol: 'IWM', dir: 'LONG', reason: 'Small caps benefit most from domestic tax cuts' },
-      { symbol: 'XLF', dir: 'LONG', reason: 'Financials rally on deregulation expectations' },
-      { symbol: 'SPY', dir: 'LONG', reason: 'Broad market lifts on pro-business policy' },
-    ]},
-  { keywords: ['auto tariff','car tariff','vehicle import'],
-    ideas: [
-      { symbol: 'F', dir: 'LONG', reason: 'Ford benefits as domestic manufacturer from auto tariffs' },
-      { symbol: 'GM', dir: 'LONG', reason: 'GM gains from reduced foreign auto competition' },
-      { symbol: 'TM', dir: 'SHORT', reason: 'Toyota exposed to US import tariffs on vehicles' },
-    ]},
-  { keywords: ['tech regulation','big tech','antitrust','section 230'],
-    ideas: [
-      { symbol: 'QQQ', dir: 'SHORT', reason: 'Tech sector pressured by regulatory overhang' },
-      { symbol: 'META', dir: 'SHORT', reason: 'Meta directly targeted by social media regulation' },
-      { symbol: 'GOOGL', dir: 'SHORT', reason: 'Google faces antitrust regulatory pressure' },
-    ]},
+// Keywords that indicate this headline is reporting Trump's own words/actions
+const TRUMP_STATEMENT_KW = [
+  'trump says','trump said','trump posts','trump posted','trump announces','trump announced',
+  'trump threatens','trump threatened','trump warns','trump warned','trump signs','trump signed',
+  'trump calls','trump called','trump claims','trump vows','trump demands','trump slams',
+  'trump blasts','trump attacks','trump praises','trump declares','trump fires','trump orders',
+  'trump truth social','trump tweeted','trump wrote','trump tells','trump told',
+  'trump executive order','trump proposes','trump reveals','trump hints',
 ];
 
-function generateTradeIdeas() {
-  const trumpHeadlines = headlines.filter(h => h.category === 'trump' || h.category === 'geopolitical');
-  const recent = trumpHeadlines.slice(0, 15);
-  const combined = recent.map(h => h.title).join(' ').toLowerCase();
-
-  const ideas = [];
-  const seenSymbols = new Set();
-
-  TRUMP_TRADES.forEach(rule => {
-    if (rule.keywords.some(k => combined.includes(k))) {
-      rule.ideas.forEach(idea => {
-        if (!seenSymbols.has(idea.symbol + idea.dir)) {
-          seenSymbols.add(idea.symbol + idea.dir);
-          // Find the triggering headline
-          const trigger = recent.find(h => rule.keywords.some(k => h.title.toLowerCase().includes(k)));
-          ideas.push({ ...idea, trigger: trigger ? trigger.title.substring(0, 80) : '' });
-        }
-      });
-    }
-  });
-
-  renderTradeIdeas(ideas.slice(0, 8));
+function isTrumpStatement(title) {
+  const t = title.toLowerCase();
+  return TRUMP_STATEMENT_KW.some(k => t.includes(k));
 }
 
-function renderTradeIdeas(ideas) {
-  const el = document.getElementById('tradeIdeas');
-  if (ideas.length === 0) {
-    el.innerHTML = '<div class="no-ideas">No active trade signals from Trump/geopolitical headlines. Monitoring...</div>';
+// ══════════════════════════════════════
+//  TRADE SIGNAL ENGINE
+// ══════════════════════════════════════
+
+const SIGNAL_RULES = [
+  { keywords:['china tariff','china trade','tariff china','china sanction','ban china','restrict china'],
+    signals:[
+      { ticker:'X', action:'BUY', urgency:'ASAP', confidence:85, reason:'US Steel surges on China tariff protection' },
+      { ticker:'NUE', action:'BUY', urgency:'ASAP', confidence:80, reason:'Nucor benefits from steel import tariffs' },
+      { ticker:'AAPL', action:'SELL', urgency:'ASAP', confidence:80, reason:'Apple supply chain heavily exposed to China' },
+      { ticker:'FXI', action:'SELL', urgency:'ASAP', confidence:90, reason:'China ETF drops on trade escalation' },
+      { ticker:'BABA', action:'SELL', urgency:'SOON', confidence:75, reason:'Alibaba pressured by US-China tensions' },
+  ]},
+  { keywords:['tariff','import tax','import duties','trade barrier','reciprocal tariff'],
+    signals:[
+      { ticker:'UUP', action:'BUY', urgency:'SOON', confidence:70, reason:'Dollar strengthens on tariff-driven flows' },
+      { ticker:'IWM', action:'BUY', urgency:'SOON', confidence:75, reason:'Small caps with domestic revenue outperform' },
+      { ticker:'EEM', action:'SELL', urgency:'ASAP', confidence:80, reason:'Emerging markets sell off on trade uncertainty' },
+      { ticker:'UVXY', action:'BUY', urgency:'ASAP', confidence:85, reason:'Volatility spikes on tariff uncertainty' },
+  ]},
+  { keywords:['iran','strait of hormuz','iran attack','iran missile','gulf of oman','iran conflict',
+              'iran strike','iran war','houthi','red sea'],
+    signals:[
+      { ticker:'USO', action:'BUY', urgency:'ASAP', confidence:90, reason:'Oil spikes on Middle East supply disruption' },
+      { ticker:'XLE', action:'BUY', urgency:'ASAP', confidence:85, reason:'Energy sector rallies on crude surge' },
+      { ticker:'LMT', action:'BUY', urgency:'ASAP', confidence:85, reason:'Defense stocks surge on military escalation' },
+      { ticker:'RTX', action:'BUY', urgency:'ASAP', confidence:80, reason:'Raytheon gains on missile/defense demand' },
+      { ticker:'GLD', action:'BUY', urgency:'ASAP', confidence:90, reason:'Gold safe-haven bid on geopolitical crisis' },
+      { ticker:'XLY', action:'SELL', urgency:'SOON', confidence:70, reason:'Consumer discretionary weakens on oil spike' },
+      { ticker:'JETS', action:'SELL', urgency:'ASAP', confidence:80, reason:'Airlines crushed by fuel cost surge' },
+  ]},
+  { keywords:['rate cut','lower rates','dovish','fed easing','powell dovish','cut rates'],
+    signals:[
+      { ticker:'QQQ', action:'BUY', urgency:'ASAP', confidence:85, reason:'Growth/tech outperforms in rate-cut environment' },
+      { ticker:'VNQ', action:'BUY', urgency:'SOON', confidence:75, reason:'REITs rally on lower borrowing costs' },
+      { ticker:'TLT', action:'BUY', urgency:'ASAP', confidence:80, reason:'Bonds rally as yields drop' },
+      { ticker:'XLF', action:'SELL', urgency:'WATCH', confidence:60, reason:'Bank margins may compress on lower rates' },
+  ]},
+  { keywords:['rate hike','higher rates','hawkish','fed tightening','powell hawkish','raise rates'],
+    signals:[
+      { ticker:'XLF', action:'BUY', urgency:'SOON', confidence:75, reason:'Banks benefit from wider interest margins' },
+      { ticker:'TLT', action:'SELL', urgency:'ASAP', confidence:85, reason:'Bond prices drop on rising yields' },
+      { ticker:'QQQ', action:'SELL', urgency:'SOON', confidence:75, reason:'Growth stocks underperform in rising rate env' },
+  ]},
+  { keywords:['russia','ukraine','nato escalat','russia sanction','russia war'],
+    signals:[
+      { ticker:'LMT', action:'BUY', urgency:'ASAP', confidence:85, reason:'Defense spending rises on NATO tensions' },
+      { ticker:'NOC', action:'BUY', urgency:'SOON', confidence:80, reason:'Northrop gains from European defense buildup' },
+      { ticker:'UNG', action:'BUY', urgency:'ASAP', confidence:80, reason:'Natural gas spikes on European supply fears' },
+      { ticker:'EWG', action:'SELL', urgency:'SOON', confidence:70, reason:'German stocks drop on Eastern European risk' },
+  ]},
+  { keywords:['trade deal','deal reached','agreement signed','trump deal','trade agreement'],
+    signals:[
+      { ticker:'SPY', action:'BUY', urgency:'ASAP', confidence:85, reason:'Broad market rallies on trade deal optimism' },
+      { ticker:'EEM', action:'BUY', urgency:'ASAP', confidence:80, reason:'Emerging markets recover on deal news' },
+      { ticker:'UVXY', action:'SELL', urgency:'ASAP', confidence:85, reason:'Volatility collapses as uncertainty drops' },
+      { ticker:'QQQ', action:'BUY', urgency:'SOON', confidence:75, reason:'Tech rebounds on trade resolution' },
+  ]},
+  { keywords:['tax cut','deregulat','pro-business','business friendly'],
+    signals:[
+      { ticker:'IWM', action:'BUY', urgency:'SOON', confidence:80, reason:'Small caps benefit most from tax cuts' },
+      { ticker:'XLF', action:'BUY', urgency:'SOON', confidence:75, reason:'Financials rally on deregulation' },
+      { ticker:'SPY', action:'BUY', urgency:'WATCH', confidence:70, reason:'Broad market lifts on business-friendly policy' },
+  ]},
+  { keywords:['auto tariff','car tariff','vehicle import','auto import'],
+    signals:[
+      { ticker:'F', action:'BUY', urgency:'SOON', confidence:75, reason:'Ford benefits as domestic manufacturer' },
+      { ticker:'GM', action:'BUY', urgency:'SOON', confidence:75, reason:'GM gains from reduced foreign competition' },
+      { ticker:'TM', action:'SELL', urgency:'ASAP', confidence:80, reason:'Toyota exposed to US auto import tariffs' },
+  ]},
+  { keywords:['tech regulation','big tech','antitrust','section 230','regulate tech'],
+    signals:[
+      { ticker:'QQQ', action:'SELL', urgency:'SOON', confidence:70, reason:'Tech sector faces regulatory headwinds' },
+      { ticker:'META', action:'SELL', urgency:'ASAP', confidence:80, reason:'Meta directly targeted by regulation' },
+      { ticker:'GOOGL', action:'SELL', urgency:'SOON', confidence:75, reason:'Google faces antitrust pressure' },
+  ]},
+  { keywords:['oil drill','energy independence','drill baby','open drilling','expand drilling'],
+    signals:[
+      { ticker:'XOP', action:'BUY', urgency:'SOON', confidence:75, reason:'Oil & gas producers benefit from drilling expansion' },
+      { ticker:'OXY', action:'BUY', urgency:'SOON', confidence:70, reason:'Occidental gains from favorable energy policy' },
+      { ticker:'FSLR', action:'SELL', urgency:'WATCH', confidence:60, reason:'Solar weakens on fossil fuel priority' },
+  ]},
+  { keywords:['crypto','bitcoin','digital asset','crypto regulation','crypto friendly'],
+    signals:[
+      { ticker:'COIN', action:'BUY', urgency:'ASAP', confidence:75, reason:'Coinbase benefits from crypto-friendly policy' },
+      { ticker:'MARA', action:'BUY', urgency:'SOON', confidence:70, reason:'Bitcoin miners rally on pro-crypto stance' },
+  ]},
+];
+
+function generateSignals() {
+  const allTrump = [...trumpPosts, ...headlines.filter(h => h.category === 'trump' || h.category === 'geopolitical')];
+  const recent = allTrump.slice(0, 20);
+  const combined = recent.map(h => h.title).join(' ').toLowerCase();
+
+  const signals = [];
+  const seen = new Set();
+
+  SIGNAL_RULES.forEach(rule => {
+    const matchedKw = rule.keywords.find(k => combined.includes(k));
+    if(!matchedKw) return;
+    rule.signals.forEach(sig => {
+      const key = sig.ticker + sig.action;
+      if(seen.has(key)) return;
+      seen.add(key);
+      const trigger = recent.find(h => h.title.toLowerCase().includes(matchedKw));
+      signals.push({ ...sig, triggerText: trigger ? trigger.title.substring(0, 90) : '', triggerTime: trigger ? trigger.time : '' });
+    });
+  });
+
+  // Sort: ASAP first, then SOON, then WATCH
+  const urgOrder = { ASAP:0, SOON:1, WATCH:2 };
+  signals.sort((a,b) => (urgOrder[a.urgency]||9) - (urgOrder[b.urgency]||9));
+
+  renderSignals(signals.slice(0, 10));
+}
+
+function renderSignals(signals) {
+  const el = document.getElementById('tradeSignals');
+  if(!signals.length) {
+    el.innerHTML = '<div class="no-data">No active trade signals. Monitoring Trump posts & geopolitical headlines...</div>';
     return;
   }
 
-  el.innerHTML = ideas.map(i => `
-    <div class="trade-idea ${i.dir === 'LONG' ? 'bullish-idea' : 'bearish-idea'}">
-      <div class="trade-idea-header">
-        <span class="trade-idea-symbol">${i.symbol}</span>
-        <span class="trade-idea-direction ${i.dir === 'LONG' ? 'bull' : 'bear'}">${i.dir}</span>
+  el.innerHTML = signals.map(s => {
+    const actionTag = s.action === 'BUY' ? 'buy-tag' : s.action === 'SELL' ? 'sell-tag' : 'hold-tag';
+    const cardClass = s.action.toLowerCase();
+    const urgClass = s.urgency === 'ASAP' ? 'urgency-asap' : s.urgency === 'SOON' ? 'urgency-soon' : 'urgency-watch';
+    const confColor = s.confidence > 75 ? 'var(--green)' : s.confidence > 60 ? 'var(--yellow)' : 'var(--text-muted)';
+
+    return `<div class="signal-card ${cardClass}">
+      <div class="signal-header">
+        <span class="signal-ticker">${s.ticker}</span>
+        <div>
+          <span class="signal-action ${actionTag}">${s.action}</span>
+          <span class="signal-urgency ${urgClass}">${s.urgency}</span>
+        </div>
       </div>
-      <div class="trade-idea-reason">${i.reason}</div>
-      ${i.trigger ? `<div class="trade-idea-trigger">"${i.trigger}..."</div>` : ''}
-    </div>
-  `).join('');
+      <div class="signal-reason">${s.reason}</div>
+      <div class="signal-confidence">
+        Confidence: ${s.confidence}%
+        <div class="conf-bar"><div class="conf-fill" style="width:${s.confidence}%;background:${confColor}"></div></div>
+      </div>
+      ${s.triggerText ? `<div class="signal-trigger">"${s.triggerText}..." ${s.triggerTime ? '('+s.triggerTime+')' : ''}</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
-// ════════════════════════════════════════════════════
-//  FETCH NEWS via rss2json (primary) + allorigins (fallback)
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
+//  FETCH FEEDS
+// ══════════════════════════════════════
 
 async function fetchFeed(feed) {
-  // Try rss2json first (returns JSON, CORS-friendly)
   try {
     const resp = await fetchTimeout(RSS2JSON + encodeURIComponent(feed.url), 15000);
-    if (!resp.ok) throw new Error(`${resp.status}`);
+    if(!resp.ok) throw new Error(resp.status);
     const data = await resp.json();
-    if (data.status === 'ok' && data.items) {
+    if(data.status==='ok' && data.items) {
       feedStatus[feed.name] = 'ok';
       return data.items.map(item => ({
-        id: hashStr(item.title || ''),
-        title: cleanText(item.title || ''),
-        link: item.link || '',
+        id: hashStr(item.title||''),
+        title: cleanText(item.title||''),
+        link: item.link||'',
         source: feed.name,
         timestamp: item.pubDate ? new Date(item.pubDate).getTime() : Date.now(),
-        description: cleanText((item.description || '').substring(0, 300)),
+        description: cleanText((item.description||'').substring(0,300)),
       }));
     }
-  } catch (e) { /* try fallback */ }
-
-  // Fallback: allorigins raw proxy + XML parse
+  } catch(e) {}
   try {
     const resp = await fetchTimeout(ALLORIGINS(feed.url), 15000);
-    if (!resp.ok) throw new Error(`${resp.status}`);
+    if(!resp.ok) throw new Error(resp.status);
     const text = await resp.text();
-    const doc = new DOMParser().parseFromString(text, 'text/xml');
+    const doc = new DOMParser().parseFromString(text,'text/xml');
     const items = doc.querySelectorAll('item');
-    if (items.length === 0) throw new Error('no items');
+    if(!items.length) throw new Error('empty');
     feedStatus[feed.name] = 'ok';
     return Array.from(items).map(item => ({
-      id: hashStr(item.querySelector('title')?.textContent || ''),
-      title: cleanText(item.querySelector('title')?.textContent || ''),
-      link: item.querySelector('link')?.textContent || '',
+      id: hashStr(item.querySelector('title')?.textContent||''),
+      title: cleanText(item.querySelector('title')?.textContent||''),
+      link: item.querySelector('link')?.textContent||'',
       source: feed.name,
       timestamp: item.querySelector('pubDate') ? new Date(item.querySelector('pubDate').textContent).getTime() : Date.now(),
-      description: cleanText((item.querySelector('description')?.textContent || '').substring(0, 300)),
+      description: cleanText((item.querySelector('description')?.textContent||'').substring(0,300)),
     }));
-  } catch (e) {
+  } catch(e) {
     feedStatus[feed.name] = 'fail';
     return [];
   }
@@ -599,102 +602,124 @@ async function fetchFeed(feed) {
 
 async function fetchAllNews() {
   setStatus('Fetching headlines...');
-  const results = await Promise.allSettled(FEEDS.map(f => fetchFeed(f)));
+  const [newsResults, trumpResults] = await Promise.all([
+    Promise.allSettled(FEEDS.map(f => fetchFeed(f))),
+    Promise.allSettled(TRUMP_FEEDS.map(f => fetchFeed(f))),
+  ]);
 
-  let newCount = 0;
-  let trumpNew = false;
+  let newCount = 0, trumpNew = false;
 
-  results.forEach(r => {
-    if (r.status !== 'fulfilled' || !r.value) return;
+  // Process general news
+  newsResults.forEach(r => {
+    if(r.status!=='fulfilled' || !r.value) return;
     r.value.forEach(item => {
-      if (!item.title || seenIds.has(item.id)) return;
+      if(!item.title || seenIds.has(item.id)) return;
       seenIds.add(item.id);
       item.time = formatTime(item.timestamp);
       item.category = classify(item.title + ' ' + item.description);
       item.sentiment = sentiment(item.title + ' ' + item.description);
       headlines.unshift(item);
       newCount++;
-      if (item.category === 'trump') trumpNew = true;
+      if(item.category === 'trump') trumpNew = true;
     });
   });
 
-  headlines.sort((a, b) => b.timestamp - a.timestamp);
-  if (headlines.length > 200) headlines = headlines.slice(0, 200);
+  // Process Trump-specific feeds
+  trumpResults.forEach(r => {
+    if(r.status!=='fulfilled' || !r.value) return;
+    r.value.forEach(item => {
+      if(!item.title) return;
+      // Add to general headlines too
+      if(!seenIds.has(item.id)) {
+        seenIds.add(item.id);
+        item.time = formatTime(item.timestamp);
+        item.category = 'trump';
+        item.sentiment = sentiment(item.title + ' ' + item.description);
+        headlines.unshift(item);
+        newCount++;
+        trumpNew = true;
+      }
+      // Add to trump posts feed if it's a direct statement
+      if(!seenTrumpIds.has(item.id) && isTrumpStatement(item.title)) {
+        seenTrumpIds.add(item.id);
+        item.time = formatTime(item.timestamp);
+        item.sentiment = sentiment(item.title + ' ' + item.description);
+        trumpPosts.unshift(item);
+      }
+    });
+  });
 
-  if (audioEnabled) {
-    if (trumpNew) playTrumpAlert();
-    else if (newCount > 0) playAlertSound();
+  headlines.sort((a,b) => b.timestamp - a.timestamp);
+  trumpPosts.sort((a,b) => b.timestamp - a.timestamp);
+  if(headlines.length > 200) headlines = headlines.slice(0,200);
+  if(trumpPosts.length > 50) trumpPosts = trumpPosts.slice(0,50);
+
+  if(audioEnabled) {
+    if(trumpNew) playTrumpAlert();
+    else if(newCount > 0) playAlertSound();
   }
 
-  const okCount = Object.values(feedStatus).filter(s => s === 'ok').length;
-  const failCount = Object.values(feedStatus).filter(s => s === 'fail').length;
-  setStatus(`${okCount} feeds connected, ${failCount} failed`);
-  document.getElementById('statusDot').classList.toggle('error', okCount === 0);
+  const ok = Object.values(feedStatus).filter(s=>s==='ok').length;
+  const fail = Object.values(feedStatus).filter(s=>s==='fail').length;
+  setStatus(`${ok} feeds live, ${fail} failed`);
+  document.getElementById('statusDot').classList.toggle('error', ok === 0);
 
   renderNews();
+  renderTrumpFeed();
   updateSentiment();
   updateMarketContext();
-  generateTradeIdeas();
+  generateSignals();
 }
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 //  MARKET DATA
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 
 async function fetchMarketData() {
-  // Try Yahoo Finance v8 chart via allorigins
   const results = await Promise.allSettled(
     SYMBOLS.map(async sym => {
       const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d`;
-      // Try allorigins
       try {
         const resp = await fetchTimeout(ALLORIGINS(url), 12000);
-        if (resp.ok) {
+        if(resp.ok) {
           const data = await resp.json();
           const meta = data.chart.result[0].meta;
           const prev = meta.chartPreviousClose || meta.previousClose;
           const price = meta.regularMarketPrice;
-          return { symbol: sym, price, change: price - prev, pct: ((price - prev) / prev) * 100 };
+          return { symbol:sym, price, change:price-prev, pct:((price-prev)/prev)*100 };
         }
       } catch(e) {}
-      // Try rss2json won't work for JSON, try direct (will fail CORS in browser but works in some cases)
       try {
         const resp = await fetchTimeout(url, 8000);
-        if (resp.ok) {
+        if(resp.ok) {
           const data = await resp.json();
           const meta = data.chart.result[0].meta;
           const prev = meta.chartPreviousClose || meta.previousClose;
           const price = meta.regularMarketPrice;
-          return { symbol: sym, price, change: price - prev, pct: ((price - prev) / prev) * 100 };
+          return { symbol:sym, price, change:price-prev, pct:((price-prev)/prev)*100 };
         }
       } catch(e) {}
       return null;
     })
   );
-
-  const quotes = results.map(r => r.status === 'fulfilled' ? r.value : null);
-  const valid = quotes.filter(Boolean);
-
+  const quotes = results.map(r => r.status==='fulfilled' ? r.value : null);
   const bar = document.getElementById('tickerBar');
-  if (valid.length > 0) {
+  const valid = quotes.filter(Boolean);
+  if(valid.length) {
     bar.innerHTML = SYMBOLS.map(sym => {
-      const q = quotes.find(x => x && x.symbol === sym);
-      if (!q) return `<div class="ticker-item"><span class="ticker-symbol">${sym}</span><span class="ticker-price flat">--</span><span class="ticker-change flat">--</span></div>`;
-      const dir = q.change >= 0 ? 'up' : 'down';
-      const sign = q.change >= 0 ? '+' : '';
-      return `<div class="ticker-item"><span class="ticker-symbol">${sym}</span><span class="ticker-price ${dir}">${q.price.toFixed(2)}</span><span class="ticker-change ${dir}">${sign}${q.change.toFixed(2)} (${sign}${q.pct.toFixed(2)}%)</span></div>`;
+      const q = quotes.find(x => x && x.symbol===sym);
+      if(!q) return `<div class="ticker-item"><span class="ticker-symbol">${sym}</span><span class="ticker-price flat">--</span><span class="ticker-change flat">--</span></div>`;
+      const d = q.change>=0?'up':'down', s = q.change>=0?'+':'';
+      return `<div class="ticker-item"><span class="ticker-symbol">${sym}</span><span class="ticker-price ${d}">${q.price.toFixed(2)}</span><span class="ticker-change ${d}">${s}${q.change.toFixed(2)} (${s}${q.pct.toFixed(2)}%)</span></div>`;
     }).join('');
   } else {
-    // Market data unavailable - show placeholders with note
-    bar.innerHTML = SYMBOLS.map(sym =>
-      `<div class="ticker-item"><span class="ticker-symbol">${sym}</span><span class="ticker-price flat">--</span><span class="ticker-change flat">mkt closed / unavail</span></div>`
-    ).join('') + '<div class="ticker-item" style="border:none;"><span class="flat" style="font-size:10px;">Market data loads when market is open</span></div>';
+    bar.innerHTML = SYMBOLS.map(sym => `<div class="ticker-item"><span class="ticker-symbol">${sym}</span><span class="ticker-price flat">--</span><span class="ticker-change flat">--</span></div>`).join('');
   }
 }
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 //  FOREX FACTORY
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 
 async function fetchForexCalendar() {
   const el = document.getElementById('forexCalendar');
@@ -703,215 +728,145 @@ async function fetchForexCalendar() {
     const data = await resp.json();
     const today = new Date().toISOString().split('T')[0];
     const events = data.filter(ev => ev.date && ev.date.startsWith(today));
-
-    if (events.length === 0) {
-      el.innerHTML = '<div class="no-ideas">No scheduled events today.</div>';
-      return;
-    }
-    el.innerHTML = events.slice(0, 12).map(ev => {
+    if(!events.length) { el.innerHTML = '<div class="no-data">No scheduled events today.</div>'; return; }
+    el.innerHTML = events.slice(0,10).map(ev => {
       const time = ev.date ? new Date(ev.date).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}).toLowerCase() : '--';
-      const ic = ev.impact === 'High' ? 'impact-high' : ev.impact === 'Medium' ? 'impact-medium' : 'impact-low';
+      const ic = ev.impact==='High'?'impact-high':ev.impact==='Medium'?'impact-medium':'impact-low';
       return `<div class="calendar-item"><span class="cal-time">${time}</span><span class="cal-currency">${ev.country||'--'}</span><span class="cal-event">${ev.title||'--'}</span><span class="cal-impact ${ic}">${ev.impact||'--'}</span></div>`;
     }).join('');
-  } catch(e) {
-    el.innerHTML = '<div class="no-ideas">Calendar unavailable. Retrying...</div>';
-  }
+  } catch(e) { el.innerHTML = '<div class="no-data">Calendar unavailable.</div>'; }
 }
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 //  RENDER
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 
 function renderNews() {
   const el = document.getElementById('newsList');
-  const filtered = activeFilter === 'all' ? headlines : headlines.filter(h => h.category === activeFilter);
+  const filtered = activeFilter==='all' ? headlines : headlines.filter(h=>h.category===activeFilter);
   document.getElementById('headlineCount').textContent = `${headlines.length} headlines`;
-
-  if (filtered.length === 0) {
-    el.innerHTML = headlines.length === 0
+  if(!filtered.length) {
+    el.innerHTML = headlines.length===0
       ? '<div class="loading-msg"><div class="spinner"></div><div>Fetching headlines...</div></div>'
       : '<div class="loading-msg">No headlines match this filter.</div>';
     return;
   }
-
   el.innerHTML = filtered.map(h => {
-    const isNew = (Date.now() - h.timestamp) < 120000;
-    const isTrump = h.category === 'trump';
-    let cls = '';
-    if (isTrump) cls = 'trump-alert' + (isNew ? ' trump-new' : '');
-    else if (isNew) cls = 'breaking';
-
+    const isNew = (Date.now()-h.timestamp) < 120000;
+    const isTrump = h.category==='trump';
+    let cls = isTrump ? 'trump-alert'+(isNew?' trump-new':'') : (isNew?'breaking':'');
     return `<div class="news-item ${cls}">
       <span class="news-time">${h.time}</span>
       <span class="news-source">${h.source}</span>
-      <span class="news-category cat-${h.category}">${h.category === 'fed' ? 'FED/FOMC' : h.category.toUpperCase()}</span>
+      <span class="news-category cat-${h.category}">${h.category==='fed'?'FED/FOMC':h.category.toUpperCase()}</span>
       <span class="news-sentiment sent-${h.sentiment.toLowerCase()}">${h.sentiment}</span>
-      <span class="news-headline">${h.link ? `<a href="${h.link}" target="_blank" rel="noopener">${h.title}</a>` : h.title}</span>
+      <span class="news-headline">${h.link?`<a href="${h.link}" target="_blank" rel="noopener">${h.title}</a>`:h.title}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderTrumpFeed() {
+  const el = document.getElementById('trumpFeed');
+  document.getElementById('trumpCount').textContent = trumpPosts.length;
+
+  if(!trumpPosts.length) {
+    el.innerHTML = '<div class="no-data">No Trump statements detected yet. Monitoring Google News, CNBC, Reuters...</div>';
+    return;
+  }
+
+  el.innerHTML = trumpPosts.slice(0, 15).map(p => {
+    const isNew = (Date.now() - p.timestamp) < 300000;
+    const sentClass = p.sentiment === 'BULLISH' ? 'sent-bullish' : p.sentiment === 'BEARISH' ? 'sent-bearish' : 'sent-neutral';
+    return `<div class="trump-post ${isNew ? 'new-post' : ''}">
+      <div class="trump-post-header">
+        <span class="trump-post-source">${p.source}</span>
+        <span class="trump-post-time">${p.time}</span>
+      </div>
+      <div class="trump-post-text">${p.link ? `<a href="${p.link}" target="_blank" rel="noopener">${p.title}</a>` : p.title}</div>
+      <span class="trump-post-sentiment ${sentClass}">${p.sentiment}</span>
     </div>`;
   }).join('');
 }
 
 function updateSentiment() {
-  const cutoff = Date.now() - 7200000;
+  const cutoff = Date.now()-7200000;
   const recent = headlines.filter(h => h.timestamp > cutoff);
-  const total = recent.length || 1;
-  const bull = recent.filter(h => h.sentiment === 'BULLISH').length;
-  const bear = recent.filter(h => h.sentiment === 'BEARISH').length;
+  const total = recent.length||1;
+  const bull = recent.filter(h => h.sentiment==='BULLISH').length;
+  const bear = recent.filter(h => h.sentiment==='BEARISH').length;
   const bp = Math.round((bull/total)*100), rp = Math.round((bear/total)*100);
-
   document.getElementById('bullPct').textContent = `${bp}%`;
   document.getElementById('bearPct').textContent = `${rp}%`;
-
   const fill = document.getElementById('sentimentFill');
   fill.style.width = `${bp}%`;
-  fill.style.background = bp > rp + 15 ? 'var(--green)' : rp > bp + 15 ? 'var(--red)' : 'linear-gradient(90deg,var(--green),var(--yellow),var(--red))';
-
-  const risk = Math.min(5, Math.max(1, Math.ceil(rp / 18)));
-  document.querySelectorAll('.risk-block').forEach((b, i) => {
-    b.className = 'risk-block' + (i < risk ? (i < 2 ? ' g' : i < 4 ? ' y' : ' r') : '');
-  });
-
+  fill.style.background = bp>rp+15?'var(--green)':rp>bp+15?'var(--red)':'linear-gradient(90deg,var(--green),var(--yellow),var(--red))';
+  const risk = Math.min(5,Math.max(1,Math.ceil(rp/18)));
+  document.querySelectorAll('.risk-block').forEach((b,i) => { b.className = 'risk-block'+(i<risk?(i<2?' g':i<4?' y':' r'):''); });
   const ov = document.getElementById('overallSentiment');
-  if (bp > rp + 20) { ov.textContent = 'RISK ON'; ov.style.color = 'var(--green)'; }
-  else if (rp > bp + 20) { ov.textContent = 'RISK OFF'; ov.style.color = 'var(--red)'; }
-  else { ov.textContent = 'MIXED'; ov.style.color = 'var(--yellow)'; }
+  if(bp>rp+20){ov.textContent='RISK ON';ov.style.color='var(--green)';}
+  else if(rp>bp+20){ov.textContent='RISK OFF';ov.style.color='var(--red)';}
+  else{ov.textContent='MIXED';ov.style.color='var(--yellow)';}
 }
 
 function updateMarketContext() {
-  const recent = headlines.slice(0, 20);
-  if (!recent.length) return;
+  const recent = headlines.slice(0,20);
+  if(!recent.length) return;
   const cats = {};
-  recent.forEach(h => cats[h.category] = (cats[h.category]||0) + 1);
-  const top = Object.entries(cats).sort((a,b) => b[1]-a[1])[0];
-  const bull = recent.filter(h => h.sentiment === 'BULLISH').length;
-  const bear = recent.filter(h => h.sentiment === 'BEARISH').length;
-
+  recent.forEach(h => cats[h.category]=(cats[h.category]||0)+1);
+  const top = Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+  const bull = recent.filter(h=>h.sentiment==='BULLISH').length;
+  const bear = recent.filter(h=>h.sentiment==='BEARISH').length;
   let ctx = '';
-  if (top) ctx += `Dominant theme: ${top[0].toUpperCase()} (${top[1]}/${recent.length}). `;
-  if (bull > bear*2) ctx += 'Headlines strongly bullish. ';
-  else if (bear > bull*2) ctx += 'Headlines strongly bearish. ';
-  else if (bull > bear) ctx += 'Slightly bullish lean. ';
-  else if (bear > bull) ctx += 'Slightly bearish lean. ';
-  else ctx += 'Mixed sentiment. ';
-
-  const tc = recent.filter(h => h.category === 'trump').length;
-  if (tc > 2) ctx += `Trump activity elevated (${tc} recent). `;
-  const gc = recent.filter(h => h.category === 'geopolitical').length;
-  if (gc > 2) ctx += `Geopolitical risk elevated. `;
-
+  if(top) ctx += `Dominant: ${top[0].toUpperCase()} (${top[1]}/${recent.length}). `;
+  if(bull>bear*2) ctx += 'Strongly bullish. ';
+  else if(bear>bull*2) ctx += 'Strongly bearish. ';
+  else if(bull>bear) ctx += 'Leaning bullish. ';
+  else if(bear>bull) ctx += 'Leaning bearish. ';
+  else ctx += 'Mixed. ';
+  const tc = recent.filter(h=>h.category==='trump').length;
+  if(tc>2) ctx += `Trump elevated (${tc}). `;
+  const gc = recent.filter(h=>h.category==='geopolitical').length;
+  if(gc>2) ctx += `Geo risk high. `;
   document.getElementById('marketContext').textContent = ctx;
 }
 
-// ════════════════════════════════════════════════════
-//  UTILITIES
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════
 
-async function fetchTimeout(url, ms) {
-  const c = new AbortController();
-  const t = setTimeout(() => c.abort(), ms);
-  const r = await fetch(url, { signal: c.signal });
-  clearTimeout(t);
-  return r;
-}
+async function fetchTimeout(url,ms){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);const r=await fetch(url,{signal:c.signal});clearTimeout(t);return r;}
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return h.toString(36);}
+function cleanText(s){const d=document.createElement('div');d.innerHTML=s;return(d.textContent||d.innerText||s).trim();}
+function formatTime(ts){const d=Math.floor((Date.now()-ts)/60000);if(d<1)return'just now';if(d<60)return`${d}m ago`;if(d<1440)return`${Math.floor(d/60)}h ago`;return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+function setStatus(m){document.getElementById('statusText').textContent=m;}
 
-function hashStr(s) { let h=0; for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;} return h.toString(36); }
+function playAlertSound(){try{const c=new AudioContext();const o=c.createOscillator();const g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;o.type='sine';g.gain.value=0.1;o.start();g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.3);o.stop(c.currentTime+0.3);}catch(e){}}
 
-function cleanText(s) { const d=document.createElement('div'); d.innerHTML=s; return (d.textContent||d.innerText||s).trim(); }
+function playTrumpAlert(){try{const c=new AudioContext();[0,0.18,0.36].forEach(d=>{const o=c.createOscillator();const g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=1200;o.type='square';g.gain.value=0;g.gain.setValueAtTime(0.15,c.currentTime+d);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d+0.12);o.start(c.currentTime+d);o.stop(c.currentTime+d+0.12);});}catch(e){}}
 
-function formatTime(ts) {
-  const diff = Math.floor((Date.now()-ts)/60000);
-  if (diff < 1) return 'just now';
-  if (diff < 60) return `${diff}m ago`;
-  if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
-  return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-}
+function updateClock(){const n=new Date();const ny=n.toLocaleTimeString('en-US',{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});document.getElementById('clock').textContent=`${ny} ET New York`;}
 
-function setStatus(msg) { document.getElementById('statusText').textContent = msg; }
+// ══════════════════════════════════════
+//  EVENTS
+// ══════════════════════════════════════
 
-function playAlertSound() {
-  try {
-    const ctx = new AudioContext();
-    const o = ctx.createOscillator(); const g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.frequency.value = 880; o.type = 'sine'; g.gain.value = 0.1;
-    o.start(); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-    o.stop(ctx.currentTime + 0.3);
-  } catch(e){}
-}
+document.querySelectorAll('.filter-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');activeFilter=tab.dataset.cat;renderNews();});});
+document.getElementById('clearFilters').addEventListener('click',()=>{document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-cat="all"]').classList.add('active');activeFilter='all';renderNews();});
+document.getElementById('audioBtn').addEventListener('click',()=>{audioEnabled=!audioEnabled;const b=document.getElementById('audioBtn');b.textContent=audioEnabled?'AUDIO ON':'AUDIO OFF';b.classList.toggle('active',audioEnabled);if(audioEnabled)playAlertSound();});
+document.getElementById('refreshBtn').addEventListener('click',()=>{fetchAllNews();fetchMarketData();fetchForexCalendar();});
 
-function playTrumpAlert() {
-  try {
-    const ctx = new AudioContext();
-    [0, 0.18, 0.36].forEach(d => {
-      const o = ctx.createOscillator(); const g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = 1200; o.type = 'square';
-      g.gain.value = 0;
-      g.gain.setValueAtTime(0.15, ctx.currentTime + d);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + d + 0.12);
-      o.start(ctx.currentTime + d); o.stop(ctx.currentTime + d + 0.12);
-    });
-  } catch(e){}
-}
-
-// ════════════════════════════════════════════════════
-//  CLOCK
-// ════════════════════════════════════════════════════
-
-function updateClock() {
-  const now = new Date();
-  const ny = now.toLocaleTimeString('en-US', { timeZone:'America/New_York', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true });
-  document.getElementById('clock').textContent = `${ny} ET New York`;
-}
-
-// ════════════════════════════════════════════════════
-//  EVENT LISTENERS
-// ════════════════════════════════════════════════════
-
-document.querySelectorAll('.filter-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    activeFilter = tab.dataset.cat;
-    renderNews();
-  });
-});
-
-document.getElementById('clearFilters').addEventListener('click', () => {
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('[data-cat="all"]').classList.add('active');
-  activeFilter = 'all';
-  renderNews();
-});
-
-document.getElementById('audioBtn').addEventListener('click', () => {
-  audioEnabled = !audioEnabled;
-  const btn = document.getElementById('audioBtn');
-  btn.textContent = audioEnabled ? 'AUDIO ON' : 'AUDIO OFF';
-  btn.classList.toggle('active', audioEnabled);
-  if (audioEnabled) playAlertSound();
-});
-
-document.getElementById('refreshBtn').addEventListener('click', () => {
-  fetchAllNews();
-  fetchMarketData();
-  fetchForexCalendar();
-});
-
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 //  INIT
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════
 
 updateClock();
-setInterval(updateClock, 1000);
-
+setInterval(updateClock,1000);
 fetchAllNews();
 fetchMarketData();
 fetchForexCalendar();
-
-setInterval(fetchAllNews, 60000);
-setInterval(fetchMarketData, 30000);
-setInterval(fetchForexCalendar, 300000);
+setInterval(fetchAllNews,60000);
+setInterval(fetchMarketData,30000);
+setInterval(fetchForexCalendar,300000);
 
 </script>
 </body>
