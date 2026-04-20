@@ -167,6 +167,34 @@
   .loading-msg{text-align:center;padding:40px;color:var(--text-muted);font-size:12px;}
   .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:8px;}
   @keyframes spin{to{transform:rotate(360deg)}}
+  /* ── Screener ── */
+  .screener-card{padding:10px;margin-bottom:6px;border-radius:4px;background:var(--bg-card);border-left:3px solid var(--cyan);}
+  .screener-card.hot{border-left-color:var(--red);background:rgba(239,68,68,0.05);}
+  .screener-card.warm{border-left-color:var(--orange);}
+  .screener-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .screener-ticker{font-weight:800;font-size:16px;color:var(--cyan);}
+  .screener-buzz{font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;}
+  .buzz-high{background:rgba(239,68,68,0.25);color:var(--red);animation:urgencyBlink 1.5s infinite;}
+  .buzz-med{background:rgba(249,115,22,0.25);color:var(--orange);}
+  .buzz-low{background:rgba(6,182,212,0.25);color:var(--cyan);}
+  .screener-sources{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0;}
+  .screener-src-tag{font-size:8px;font-weight:700;padding:1px 5px;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;}
+  .src-reddit{background:rgba(255,69,0,0.2);color:#ff6b35;}
+  .src-news{background:rgba(59,130,246,0.2);color:var(--blue);}
+  .src-premarket{background:rgba(168,85,247,0.2);color:var(--purple);}
+  .src-social{background:rgba(234,179,8,0.2);color:var(--yellow);}
+  .screener-mentions{font-size:10px;color:var(--text-secondary);line-height:1.4;}
+  .screener-sentiment-bar{display:flex;align-items:center;gap:4px;margin-top:4px;font-size:9px;color:var(--text-muted);}
+  .mini-bar{width:60px;height:4px;background:var(--bg-hover);border-radius:2px;overflow:hidden;display:flex;}
+  .mini-bar-bull{background:var(--green);height:100%;}.mini-bar-bear{background:var(--red);height:100%;}
+  .screener-action{margin-top:6px;display:flex;gap:4px;}
+  .screener-btn{flex:1;padding:4px;border-radius:3px;font-family:inherit;font-size:9px;font-weight:700;cursor:pointer;border:1px solid var(--border);text-align:center;}
+  .screener-btn.watch-btn{background:rgba(6,182,212,0.15);color:var(--cyan);border-color:rgba(6,182,212,0.3);}
+  .screener-btn.trade-btn{background:rgba(34,197,94,0.15);color:var(--green);border-color:rgba(34,197,94,0.3);}
+  .screener-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
+  .screener-stat{background:var(--bg-card);border-radius:4px;padding:8px;text-align:center;}
+  .screener-stat-val{font-size:16px;font-weight:800;color:var(--cyan);}
+  .screener-stat-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
   .disclaimer{font-size:8px;color:var(--text-muted);padding:8px 12px;text-align:center;opacity:0.6;}
   @media(max-width:1000px){.main{grid-template-columns:1fr;}.sidebar{display:none;}}
 </style>
@@ -222,6 +250,7 @@
     <div class="sidebar-tabs">
       <button class="sidebar-tab active" data-panel="signals">SIGNALS</button>
       <button class="sidebar-tab" data-panel="portfolio">PORTFOLIO</button>
+      <button class="sidebar-tab" data-panel="screener">SCREENER</button>
       <button class="sidebar-tab" data-panel="info">INFO</button>
     </div>
 
@@ -279,6 +308,19 @@
       </div>
     </div>
 
+    <!-- ═══ SCREENER PANEL ═══ -->
+    <div class="sidebar-panel" id="panel-screener">
+      <div class="sidebar-section">
+        <div class="sidebar-title">&#128640; MOMENTUM SCREENER</div>
+        <div class="screener-summary">
+          <div class="screener-stat"><div class="screener-stat-val" id="scTrending">0</div><div class="screener-stat-label">Trending</div></div>
+          <div class="screener-stat"><div class="screener-stat-val" id="scReddit">0</div><div class="screener-stat-label">Reddit Buzz</div></div>
+          <div class="screener-stat"><div class="screener-stat-val" id="scPremarket">0</div><div class="screener-stat-label">Pre-Mkt Movers</div></div>
+        </div>
+        <div id="screenerList"><div class="no-data">Scanning for momentum stocks...</div></div>
+      </div>
+    </div>
+
     <!-- ═══ INFO PANEL ═══ -->
     <div class="sidebar-panel" id="panel-info">
       <div class="sidebar-section">
@@ -325,6 +367,15 @@ const TRUMP_FEEDS=[
   {name:'Trump Post',url:'https://news.google.com/rss/search?q=%22trump+says%22+OR+%22trump+posts%22+OR+%22trump+truth+social%22&hl=en-US&gl=US&ceid=US:en'},
   {name:'Trump Tariff',url:'https://news.google.com/rss/search?q=trump+tariff+OR+trump+trade+OR+trump+economy+OR+trump+market&hl=en-US&gl=US&ceid=US:en'},
   {name:'Trump Action',url:'https://news.google.com/rss/search?q=%22trump+announces%22+OR+%22trump+threatens%22+OR+%22trump+signs%22+OR+%22trump+said%22&hl=en-US&gl=US&ceid=US:en'},
+];
+const SCREENER_FEEDS=[
+  {name:'Reddit WSB',src:'reddit',url:'https://www.reddit.com/r/wallstreetbets/hot.rss'},
+  {name:'Reddit Stocks',src:'reddit',url:'https://www.reddit.com/r/stocks/hot.rss'},
+  {name:'Reddit Options',src:'reddit',url:'https://www.reddit.com/r/options/hot.rss'},
+  {name:'Pre-Mkt',src:'premarket',url:'https://news.google.com/rss/search?q=premarket+movers+OR+%22stocks+to+watch%22+OR+%22pre-market%22+movers&hl=en-US&gl=US&ceid=US:en'},
+  {name:'Volume',src:'news',url:'https://news.google.com/rss/search?q=%22unusual+volume%22+OR+%22volume+spike%22+OR+%22most+active+stocks%22&hl=en-US&gl=US&ceid=US:en'},
+  {name:'Momentum',src:'news',url:'https://news.google.com/rss/search?q=stock+breakout+OR+stock+momentum+OR+%22stocks+moving%22+OR+%22trending+stocks%22&hl=en-US&gl=US&ceid=US:en'},
+  {name:'Social Buzz',src:'social',url:'https://news.google.com/rss/search?q=wallstreetbets+OR+%22meme+stock%22+OR+%22retail+investors%22+OR+%22short+squeeze%22&hl=en-US&gl=US&ceid=US:en'},
 ];
 const SYMBOLS=['QQQ','SPY','IWM','DIA','UVXY','TLT','GLD'];
 const RSS2JSON='https://api.rss2json.com/v1/api.json?rss_url=';
@@ -723,6 +774,151 @@ function drawChart(){
 }
 
 // ══════════════════════════════════════
+//  MOMENTUM SCREENER ENGINE
+// ══════════════════════════════════════
+const KNOWN_TICKERS=new Set(['AAPL','MSFT','GOOGL','GOOG','AMZN','NVDA','META','TSLA','BRK','JPM','JNJ','UNH','V','XOM','PG','MA','HD','CVX','MRK','ABBV','LLY','PEP','KO','COST','AVGO','TMO','MCD','WMT','CSCO','ACN','ABT','CRM','DHR','NKE','TXN','NEE','BMY','UPS','PM','MS','INTC','AMD','QCOM','INTU','AMGN','IBM','GE','CAT','BA','HON','GS','BLK','ISRG','AXP','MDT','SYK','GILD','MMM','ADI','LRCX','REGN','ZTS','BKNG','CME','CI','CB','SCHW','PYPL','SQ','SHOP','ROKU','SNAP','PINS','PLTR','COIN','SOFI','RIVN','LCID','NIO','XPEV','LI','BABA','JD','PDD','SE','GRAB','MELI','NU','RBLX','U','DKNG','PENN','WYNN','LVS','MGM','ABNB','UBER','LYFT','DASH','HOOD','AFRM','UPST','MARA','RIOT','MSTR','CLSK','HUT','GME','AMC','BBBY','BB','NOK','WISH','CLOV','SOFI','OPEN','SPCE','PLTR','PALANTIR','AI','SMCI','ARM','CRWD','PANW','ZS','NET','DDOG','SNOW','MDB','CFLT','PATH','NFLX','DIS','CMCSA','WBD','PARA','SPOT','TTD','ROKU','CRWD','PANW','ZS','FTNT','OKTA','MNDY','TEAM','TWLO','DOCU','ZM','ORCL','NOW','WDAY','VEEV','BILL','HUBS','FIVN','ESTC','CRSP','EDIT','NTLA','BEAM','EXAS','DXCM','ALGN','PODD','INSP','IRTC','LNTH','SMMT','AXON','TER','ON','MCHP','SWKS','WOLF','ENPH','SEDG','FSLR','RUN','MAXN','ARRY','SPWR','OXY','DVN','FANG','MPC','VLO','PSX','PXD','EOG','SLB','HAL','BKR','CLF','X','NUE','STLD','AA','FCX','VALE','RIO','BHP','GOLD','NEM','FNV','WPM','GDX','SLV','GLD','USO','UNG','XLE','XLF','XLK','XLV','XLI','XLY','XLP','XLU','XLRE','XLB','SPY','QQQ','IWM','DIA','UVXY','VXX','SQQQ','TQQQ','ARKK','ARKG','ARKF','ARKW','JETS','TAN','LIT','ICLN','KWEB','FXI','EEM','EWZ','EWG','VNQ','TLT','HYG','LQD','UUP','FXE','GDX','GDXJ','XOP','OIH','KRE','SMH','SOXX','XBI','IBB','XHB','ITB','IYT','XRT','HACK','BOTZ','ROBO','SKYY','CLOU','WCLD','CIBR','FINX','BUG','URA','URNM','LMT','RTX','NOC','GD','HII','KTOS','DFEN','ITA','F','GM','TM','STLA','RACE','LCID','RIVN','FSR','WKHS','GOEV','REE','LAZR','VLDR','LIDR','MVIS','IONQ','RGTI','QUBT','QBTS','IRM','DLR','EQIX','AMT','CCI','SBAC']);
+
+let screenerData=[];
+let screenerItems=[];
+
+async function fetchScreenerFeeds(){
+  const results=await Promise.allSettled(SCREENER_FEEDS.map(async feed=>{
+    try{
+      const resp=await fetchTimeout(RSS2JSON+encodeURIComponent(feed.url),15000);
+      if(!resp.ok)throw 0;
+      const data=await resp.json();
+      if(data.status==='ok'&&data.items){
+        return data.items.map(item=>({
+          title:cleanText(item.title||''),
+          description:cleanText((item.description||'').substring(0,500)),
+          link:item.link||'',
+          source:feed.name,
+          srcType:feed.src,
+          timestamp:item.pubDate?new Date(item.pubDate).getTime():Date.now(),
+        }));
+      }
+    }catch(e){}
+    return[];
+  }));
+
+  screenerItems=[];
+  results.forEach(r=>{if(r.status==='fulfilled')screenerItems=screenerItems.concat(r.value);});
+  processScreener();
+}
+
+function extractTickers(text){
+  const found=new Set();
+  // Match $TICKER pattern
+  const dollarMatch=text.match(/\$([A-Z]{1,5})\b/g);
+  if(dollarMatch)dollarMatch.forEach(m=>found.add(m.replace('$','')));
+  // Match known tickers as standalone words
+  const words=text.toUpperCase().split(/[\s,;:()\[\]{}|/\\]+/);
+  words.forEach(w=>{
+    const clean=w.replace(/[^A-Z]/g,'');
+    if(clean.length>=2&&clean.length<=5&&KNOWN_TICKERS.has(clean))found.add(clean);
+  });
+  return[...found];
+}
+
+function processScreener(){
+  const tickerMap={};// ticker -> {mentions, sources, headlines, sentiment, srcTypes}
+
+  screenerItems.forEach(item=>{
+    const text=item.title+' '+item.description;
+    const tickers=extractTickers(text);
+    const sent=sentiment(text);
+
+    tickers.forEach(t=>{
+      if(!tickerMap[t])tickerMap[t]={ticker:t,mentions:0,sources:new Set(),srcTypes:new Set(),headlines:[],bullish:0,bearish:0,neutral:0,latestTime:0};
+      const m=tickerMap[t];
+      m.mentions++;
+      m.sources.add(item.source);
+      m.srcTypes.add(item.srcType);
+      if(sent==='BULLISH')m.bullish++;
+      else if(sent==='BEARISH')m.bearish++;
+      else m.neutral++;
+      if(item.timestamp>m.latestTime)m.latestTime=item.timestamp;
+      if(m.headlines.length<3)m.headlines.push({title:item.title.substring(0,80),source:item.source,srcType:item.srcType});
+    });
+  });
+
+  // Also scan main headlines for ticker mentions
+  headlines.slice(0,50).forEach(h=>{
+    const tickers=extractTickers(h.title+' '+h.description);
+    tickers.forEach(t=>{
+      if(!tickerMap[t])tickerMap[t]={ticker:t,mentions:0,sources:new Set(),srcTypes:new Set(),headlines:[],bullish:0,bearish:0,neutral:0,latestTime:0};
+      const m=tickerMap[t];
+      m.mentions++;
+      m.sources.add(h.source);
+      m.srcTypes.add('news');
+      if(h.sentiment==='BULLISH')m.bullish++;
+      else if(h.sentiment==='BEARISH')m.bearish++;
+      else m.neutral++;
+      if(h.timestamp>m.latestTime)m.latestTime=h.timestamp;
+    });
+  });
+
+  // Score and rank
+  let scored=Object.values(tickerMap).map(m=>{
+    // Buzz score: mentions * source diversity * recency bonus
+    const srcBonus=m.srcTypes.size*1.5;
+    const recency=m.latestTime>(Date.now()-3600000)?2:m.latestTime>(Date.now()-86400000)?1:0.5;
+    const redditBonus=m.srcTypes.has('reddit')?3:0;
+    const premarketBonus=m.srcTypes.has('premarket')?2:0;
+    m.buzzScore=Math.round((m.mentions*srcBonus*recency+redditBonus+premarketBonus)*10)/10;
+    m.sources=[...m.sources];
+    m.srcTypes=[...m.srcTypes];
+    return m;
+  });
+
+  // Filter out index ETFs from screener (they're always mentioned)
+  const indexETFs=new Set(['SPY','QQQ','DIA','IWM','VIX']);
+  scored=scored.filter(m=>!indexETFs.has(m.ticker));
+
+  scored.sort((a,b)=>b.buzzScore-a.buzzScore);
+  screenerData=scored.slice(0,15);
+  renderScreener();
+}
+
+function renderScreener(){
+  const el=document.getElementById('screenerList');
+  const redditCount=screenerData.filter(s=>s.srcTypes.includes('reddit')).length;
+  const preMktCount=screenerData.filter(s=>s.srcTypes.includes('premarket')).length;
+  document.getElementById('scTrending').textContent=screenerData.length;
+  document.getElementById('scReddit').textContent=redditCount;
+  document.getElementById('scPremarket').textContent=preMktCount;
+
+  if(!screenerData.length){el.innerHTML='<div class="no-data">No momentum stocks detected yet. Data refreshes every 2 minutes.</div>';return;}
+
+  el.innerHTML=screenerData.map((s,i)=>{
+    const heat=i<3?'hot':i<7?'warm':'';
+    const buzzClass=s.buzzScore>=20?'buzz-high':s.buzzScore>=10?'buzz-med':'buzz-low';
+    const totalSent=s.bullish+s.bearish+s.neutral||1;
+    const bullPct=Math.round(s.bullish/totalSent*100);
+    const bearPct=Math.round(s.bearish/totalSent*100);
+
+    const srcTags=s.srcTypes.map(st=>`<span class="screener-src-tag src-${st}">${st}</span>`).join('');
+
+    return`<div class="screener-card ${heat}">
+      <div class="screener-header">
+        <span class="screener-ticker">${s.ticker}</span>
+        <span class="screener-buzz ${buzzClass}">BUZZ ${s.buzzScore}</span>
+      </div>
+      <div class="screener-sources">${srcTags} <span style="font-size:9px;color:var(--text-muted)">${s.mentions} mentions across ${s.sources.length} sources</span></div>
+      <div class="screener-mentions">${s.headlines.slice(0,2).map(h=>'&bull; '+h.title).join('<br>')}</div>
+      <div class="screener-sentiment-bar">
+        <span class="up">${bullPct}%</span>
+        <div class="mini-bar"><div class="mini-bar-bull" style="width:${bullPct}%"></div><div class="mini-bar-bear" style="width:${bearPct}%"></div></div>
+        <span class="down">${bearPct}%</span>
+      </div>
+      <div class="screener-action">
+        <button class="screener-btn trade-btn" onclick="executeTrade('${s.ticker}','BUY','Momentum screener: buzz score ${s.buzzScore}','screener_${s.ticker}')">PAPER BUY $100</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
 //  FETCH & PROCESS
 // ══════════════════════════════════════
 async function fetchFeed(feed){
@@ -799,13 +995,14 @@ document.getElementById('resetPortfolio').addEventListener('click',()=>{if(confi
 loadPortfolio();
 if(portfolio.autoTrade){const b=document.getElementById('autoTradeBtn');b.textContent='ON';b.classList.add('active-green');}
 updateClock();setInterval(updateClock,1000);
-fetchAllNews();fetchMarketData();fetchForexCalendar();
+fetchAllNews();fetchMarketData();fetchForexCalendar();fetchScreenerFeeds();
 renderPortfolio();
 // Retry any pending trades from previous session
 setTimeout(()=>{if(portfolio.pendingQueue.length)retryPendingTrades();},5000);
 setInterval(fetchAllNews,60000);
 setInterval(fetchMarketData,30000);
 setInterval(fetchForexCalendar,300000);
+setInterval(fetchScreenerFeeds,120000); // Screener every 2 min
 // Update portfolio values + retry pending trades every 2 min
 setInterval(async()=>{
   for(const t of Object.keys(portfolio.positions)){await getPrice(t);}
