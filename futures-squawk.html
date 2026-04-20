@@ -337,10 +337,10 @@ let currentSignals=[]; // Track active signals for auto-trade & execute buttons
 //  PORTFOLIO (persisted in localStorage)
 // ══════════════════════════════════════
 const PORT_KEY='squawk_portfolio_v1';
-let portfolio={cash:1000,startBal:1000,positions:{},trades:[],snapshots:[{t:Date.now(),v:1000}],autoTrade:false,executedSignals:new Set()};
+let portfolio={cash:1000,startBal:1000,positions:{},trades:[],snapshots:[{t:Date.now(),v:1000}],autoTrade:false,executedSignals:new Set(),pendingQueue:[]};
 
 function loadPortfolio(){
-  try{const d=localStorage.getItem(PORT_KEY);if(d){const p=JSON.parse(d);portfolio={...portfolio,...p};portfolio.executedSignals=new Set(p.executedSignals||[]);}}catch(e){}
+  try{const d=localStorage.getItem(PORT_KEY);if(d){const p=JSON.parse(d);portfolio={...portfolio,...p};portfolio.executedSignals=new Set(p.executedSignals||[]);portfolio.pendingQueue=p.pendingQueue||[];}}catch(e){}
 }
 function savePortfolio(){
   try{const d={...portfolio,executedSignals:[...portfolio.executedSignals]};localStorage.setItem(PORT_KEY,JSON.stringify(d));}catch(e){}
@@ -377,7 +377,16 @@ async function getPrice(ticker){
 async function executeTrade(ticker,action,reason,signalId){
   if(portfolio.executedSignals.has(signalId)) return;
   const price=await getPrice(ticker);
-  if(!price){setStatus(`No price for ${ticker} - market closed?`);return;}
+  if(!price){
+    // Queue for retry when market opens
+    if(!portfolio.pendingQueue.find(p=>p.signalId===signalId)){
+      portfolio.pendingQueue.push({ticker,action,reason,signalId,queuedAt:Date.now()});
+      savePortfolio();
+    }
+    const pending=portfolio.pendingQueue.length;
+    setStatus(`${ticker} queued (${pending} pending - market closed)`);
+    return;
+  }
 
   const posSize=100; // $100 per trade
   if(action==='BUY'){
@@ -410,10 +419,28 @@ async function executeTrade(ticker,action,reason,signalId){
   }
 
   portfolio.executedSignals.add(signalId);
+  portfolio.pendingQueue=portfolio.pendingQueue.filter(p=>p.signalId!==signalId);
   recordSnapshot();
   savePortfolio();
   renderPortfolio();
   renderSignals(currentSignals);
+}
+
+async function retryPendingTrades(){
+  if(!portfolio.pendingQueue.length) return;
+  // Drop signals older than 24 hours - no longer relevant
+  const cutoff=Date.now()-86400000;
+  portfolio.pendingQueue=portfolio.pendingQueue.filter(p=>p.queuedAt>cutoff);
+  if(!portfolio.pendingQueue.length){savePortfolio();return;}
+
+  setStatus(`Retrying ${portfolio.pendingQueue.length} queued trades...`);
+  const queue=[...portfolio.pendingQueue];
+  for(const p of queue){
+    await executeTrade(p.ticker,p.action,p.reason,p.signalId);
+  }
+  const remaining=portfolio.pendingQueue.length;
+  if(remaining===0) setStatus('All queued trades executed!');
+  else setStatus(`${remaining} trades still pending (no price yet)`);
 }
 
 async function sellPosition(ticker){
@@ -555,7 +582,10 @@ function renderSignals(signals){
     const uc=s.urgency==='ASAP'?'urgency-asap':s.urgency==='SOON'?'urgency-soon':'urgency-watch';
     const confCol=s.conf>75?'var(--green)':s.conf>60?'var(--yellow)':'var(--text-muted)';
     const executed=portfolio.executedSignals.has(s.id);
+    const pending=portfolio.pendingQueue.find(p=>p.signalId===s.id);
     const btnClass=s.action==='BUY'?'exec-buy':'exec-sell';
+    const btnLabel=executed?'EXECUTED':pending?'QUEUED (market closed)':'PAPER '+s.action+' $100';
+    const btnDisabled=executed||pending;
     return `<div class="signal-card ${cc}">
       <div class="signal-header">
         <span class="signal-ticker">${s.ticker}</span>
@@ -564,7 +594,7 @@ function renderSignals(signals){
       <div class="signal-reason">${s.reason}</div>
       <div class="signal-conf">Confidence: ${s.conf}% <div class="conf-bar"><div class="conf-fill" style="width:${s.conf}%;background:${confCol}"></div></div></div>
       ${s.triggerText?`<div class="signal-trigger">"${s.triggerText}..." ${s.triggerTime?'('+s.triggerTime+')':''}</div>`:''}
-      <button class="signal-exec-btn ${btnClass} ${executed?'executed':''}" onclick="${executed?'':`executeTrade('${s.ticker}','${s.action}','${s.reason.replace(/'/g,"\\'")}','${s.id}')`}" ${executed?'disabled':''}>${executed?'EXECUTED':'PAPER '+s.action+' $100'}</button>
+      <button class="signal-exec-btn ${btnClass} ${btnDisabled?'executed':''}" onclick="${btnDisabled?'':`executeTrade('${s.ticker}','${s.action}','${s.reason.replace(/'/g,"\\'")}','${s.id}')`}" ${btnDisabled?'disabled':''}>${btnLabel}</button>
     </div>`;
   }).join('');
 }
@@ -771,11 +801,17 @@ if(portfolio.autoTrade){const b=document.getElementById('autoTradeBtn');b.textCo
 updateClock();setInterval(updateClock,1000);
 fetchAllNews();fetchMarketData();fetchForexCalendar();
 renderPortfolio();
+// Retry any pending trades from previous session
+setTimeout(()=>{if(portfolio.pendingQueue.length)retryPendingTrades();},5000);
 setInterval(fetchAllNews,60000);
 setInterval(fetchMarketData,30000);
 setInterval(fetchForexCalendar,300000);
-// Update portfolio values every 2 min
-setInterval(async()=>{for(const t of Object.keys(portfolio.positions)){await getPrice(t);}recordSnapshot();savePortfolio();renderPortfolio();},120000);
+// Update portfolio values + retry pending trades every 2 min
+setInterval(async()=>{
+  for(const t of Object.keys(portfolio.positions)){await getPrice(t);}
+  recordSnapshot();savePortfolio();renderPortfolio();
+  if(portfolio.pendingQueue.length)retryPendingTrades();
+},120000);
 </script>
 </body>
 </html>
