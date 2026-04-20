@@ -81,8 +81,9 @@
   .sidebar{border-left:1px solid var(--border);overflow-y:hidden;display:flex;flex-direction:column;}
 
   /* ── Sidebar Tabs ── */
-  .sidebar-tabs{display:flex;background:var(--bg-secondary);border-bottom:1px solid var(--border);flex-shrink:0;}
-  .sidebar-tab{flex:1;padding:8px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;}
+  .sidebar-tabs{display:flex;background:var(--bg-secondary);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .sidebar-tabs::-webkit-scrollbar{height:0;}
+  .sidebar-tab{flex:0 0 auto;padding:8px 10px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;}
   .sidebar-tab:hover{color:var(--text-primary);background:var(--bg-hover);}
   .sidebar-tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
   .sidebar-panel{display:none;overflow-y:auto;flex:1;}
