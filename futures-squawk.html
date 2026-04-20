@@ -195,6 +195,36 @@
   .screener-stat{background:var(--bg-card);border-radius:4px;padding:8px;text-align:center;}
   .screener-stat-val{font-size:16px;font-weight:800;color:var(--cyan);}
   .screener-stat-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
+  /* ── Smart Money ── */
+  .sector-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:10px;}
+  .sector-cell{padding:8px;border-radius:4px;text-align:center;position:relative;}
+  .sector-cell-name{font-size:9px;font-weight:700;color:var(--text-primary);text-transform:uppercase;letter-spacing:0.5px;}
+  .sector-cell-etf{font-size:8px;color:rgba(255,255,255,0.6);margin-top:1px;}
+  .sector-cell-pct{font-size:14px;font-weight:800;margin-top:2px;}
+  .sector-cell-period{font-size:7px;color:rgba(255,255,255,0.5);margin-top:1px;}
+  .sm-card{padding:10px;margin-bottom:6px;border-radius:4px;background:var(--bg-card);}
+  .sm-card.insider{border-left:3px solid var(--green);}
+  .sm-card.inst{border-left:3px solid var(--purple);}
+  .sm-card.flow{border-left:3px solid var(--cyan);}
+  .sm-card.accum{border-left:3px solid var(--yellow);}
+  .sm-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .sm-card-type{font-size:8px;font-weight:700;padding:1px 6px;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;}
+  .sm-type-insider{background:rgba(34,197,94,0.2);color:var(--green);}
+  .sm-type-13f{background:rgba(168,85,247,0.2);color:var(--purple);}
+  .sm-type-flow{background:rgba(6,182,212,0.2);color:var(--cyan);}
+  .sm-type-accum{background:rgba(234,179,8,0.2);color:var(--yellow);}
+  .sm-card-time{font-size:9px;color:var(--text-muted);}
+  .sm-card-text{font-size:11px;color:var(--text-secondary);line-height:1.4;}
+  .sm-card-text a{color:var(--cyan);text-decoration:none;}.sm-card-text a:hover{text-decoration:underline;}
+  .sm-card-tickers{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
+  .sm-ticker-tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px;background:rgba(6,182,212,0.15);color:var(--cyan);}
+  .sm-summary{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-bottom:10px;}
+  .sm-stat{background:var(--bg-card);border-radius:4px;padding:6px;text-align:center;}
+  .sm-stat-val{font-size:14px;font-weight:800;}
+  .sm-stat-label{font-size:7px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
+  .period-tabs{display:flex;gap:4px;margin-bottom:8px;}
+  .period-tab{padding:3px 8px;border-radius:3px;font-size:9px;font-weight:700;cursor:pointer;background:var(--bg-card);color:var(--text-muted);border:1px solid var(--border);font-family:inherit;}
+  .period-tab.active{background:var(--cyan);color:var(--bg-primary);border-color:var(--cyan);}
   .disclaimer{font-size:8px;color:var(--text-muted);padding:8px 12px;text-align:center;opacity:0.6;}
   /* ── Mobile Toggle ── */
   .mobile-toggle{display:none;position:fixed;bottom:16px;right:16px;z-index:100;width:50px;height:50px;border-radius:50%;background:var(--cyan);color:var(--bg-primary);border:none;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 4px 15px rgba(6,182,212,0.4);font-family:inherit;}
@@ -281,6 +311,7 @@
       <button class="sidebar-tab active" data-panel="signals">SIGNALS</button>
       <button class="sidebar-tab" data-panel="portfolio">PORTFOLIO</button>
       <button class="sidebar-tab" data-panel="screener">SCREENER</button>
+      <button class="sidebar-tab" data-panel="smartmoney">SMART $</button>
       <button class="sidebar-tab" data-panel="info">INFO</button>
     </div>
 
@@ -348,6 +379,33 @@
           <div class="screener-stat"><div class="screener-stat-val" id="scPremarket">0</div><div class="screener-stat-label">Pre-Mkt Movers</div></div>
         </div>
         <div id="screenerList"><div class="no-data">Scanning for momentum stocks...</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ SMART MONEY PANEL ═══ -->
+    <div class="sidebar-panel" id="panel-smartmoney">
+      <div class="sidebar-section">
+        <div class="sidebar-title">&#127919; SECTOR ROTATION HEATMAP</div>
+        <div class="period-tabs">
+          <button class="period-tab active" data-period="1mo" onclick="setSectorPeriod('1mo')">1 MONTH</button>
+          <button class="period-tab" data-period="3mo" onclick="setSectorPeriod('3mo')">3 MONTH</button>
+          <button class="period-tab" data-period="6mo" onclick="setSectorPeriod('6mo')">6 MONTH</button>
+        </div>
+        <div class="sector-grid" id="sectorGrid"><div class="no-data">Loading sector data...</div></div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">&#128176; SMART MONEY SIGNALS</div>
+        <div class="sm-summary">
+          <div class="sm-stat"><div class="sm-stat-val" style="color:var(--green)" id="smInsider">0</div><div class="sm-stat-label">Insider Buys</div></div>
+          <div class="sm-stat"><div class="sm-stat-val" style="color:var(--purple)" id="sm13f">0</div><div class="sm-stat-label">13F Moves</div></div>
+          <div class="sm-stat"><div class="sm-stat-val" style="color:var(--cyan)" id="smFlows">0</div><div class="sm-stat-label">Fund Flows</div></div>
+          <div class="sm-stat"><div class="sm-stat-val" style="color:var(--yellow)" id="smAccum">0</div><div class="sm-stat-label">Accumulation</div></div>
+        </div>
+        <div id="smartMoneyFeed"><div class="no-data">Scanning institutional activity...</div></div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">&#128293; EARLY INNINGS — TOP PICKS</div>
+        <div id="earlyInnings"><div class="no-data">Analyzing smart money convergence...</div></div>
       </div>
     </div>
 
@@ -799,6 +857,240 @@ function drawChart(){
 }
 
 // ══════════════════════════════════════
+//  SMART MONEY ENGINE
+// ══════════════════════════════════════
+
+const SMART_MONEY_FEEDS=[
+  {name:'13F/Hedge Fund',type:'13f',url:'https://news.google.com/rss/search?q=13F+filing+OR+%22hedge+fund+buys%22+OR+%22institutional+buying%22+OR+%22smart+money%22&hl=en-US&gl=US&ceid=US:en'},
+  {name:'Insider Buying',type:'insider',url:'https://news.google.com/rss/search?q=%22insider+buying%22+OR+%22insider+purchase%22+OR+%22CEO+buys+shares%22+OR+%22director+buys%22+OR+%22insider+buys%22&hl=en-US&gl=US&ceid=US:en'},
+  {name:'Fund Flows',type:'flow',url:'https://news.google.com/rss/search?q=%22ETF+inflows%22+OR+%22fund+flows%22+OR+%22sector+rotation%22+OR+%22money+flowing+into%22&hl=en-US&gl=US&ceid=US:en'},
+  {name:'Accumulation',type:'accum',url:'https://news.google.com/rss/search?q=%22institutional+accumulation%22+OR+%22accumulation%22+stock+OR+%22dark+pool%22+OR+%22block+trade%22&hl=en-US&gl=US&ceid=US:en'},
+];
+
+const SECTOR_ETFS=[
+  {sym:'XLK',name:'Technology',color:'#3b82f6'},
+  {sym:'XLE',name:'Energy',color:'#f97316'},
+  {sym:'XLF',name:'Financials',color:'#22c55e'},
+  {sym:'XLV',name:'Healthcare',color:'#ef4444'},
+  {sym:'XLI',name:'Industrials',color:'#a855f7'},
+  {sym:'XLY',name:'Consumer Disc',color:'#eab308'},
+  {sym:'XLP',name:'Consumer Staple',color:'#06b6d4'},
+  {sym:'XLU',name:'Utilities',color:'#64748b'},
+  {sym:'XLRE',name:'Real Estate',color:'#ec4899'},
+  {sym:'XLB',name:'Materials',color:'#14b8a6'},
+];
+
+let smartMoneyItems=[];
+let sectorData={};
+let sectorPeriod='1mo';
+
+function setSectorPeriod(p){
+  sectorPeriod=p;
+  document.querySelectorAll('.period-tab').forEach(t=>{t.classList.toggle('active',t.dataset.period===p);});
+  renderSectorGrid();
+}
+
+async function fetchSectorRotation(){
+  const results=await Promise.allSettled(SECTOR_ETFS.map(async sec=>{
+    try{
+      // Fetch 6mo of weekly data so we can calculate 1mo/3mo/6mo returns
+      const url=`https://query1.finance.yahoo.com/v8/finance/chart/${sec.sym}?interval=1wk&range=6mo`;
+      const resp=await fetchTimeout(ALLORIGINS(url),12000);
+      if(!resp.ok) throw 0;
+      const data=await resp.json();
+      const closes=data.chart.result[0].indicators.quote[0].close.filter(c=>c!==null);
+      if(closes.length<2) throw 0;
+      const now=closes[closes.length-1];
+      const mo1=closes.length>=5?closes[closes.length-5]:closes[0];
+      const mo3=closes.length>=13?closes[closes.length-13]:closes[0];
+      const mo6=closes[0];
+      sectorData[sec.sym]={
+        '1mo':((now-mo1)/mo1*100),
+        '3mo':((now-mo3)/mo3*100),
+        '6mo':((now-mo6)/mo6*100),
+        price:now,
+      };
+    }catch(e){
+      // Try direct (might work in some environments)
+      try{
+        const url=`https://query1.finance.yahoo.com/v8/finance/chart/${sec.sym}?interval=1wk&range=6mo`;
+        const resp=await fetchTimeout(url,8000);
+        if(!resp.ok) throw 0;
+        const data=await resp.json();
+        const closes=data.chart.result[0].indicators.quote[0].close.filter(c=>c!==null);
+        if(closes.length<2) throw 0;
+        const now=closes[closes.length-1];
+        const mo1=closes.length>=5?closes[closes.length-5]:closes[0];
+        const mo3=closes.length>=13?closes[closes.length-13]:closes[0];
+        const mo6=closes[0];
+        sectorData[sec.sym]={'1mo':((now-mo1)/mo1*100),'3mo':((now-mo3)/mo3*100),'6mo':((now-mo6)/mo6*100),price:now};
+      }catch(e2){}
+    }
+  }));
+  renderSectorGrid();
+}
+
+function renderSectorGrid(){
+  const el=document.getElementById('sectorGrid');
+  const hasData=Object.keys(sectorData).length>0;
+
+  if(!hasData){
+    el.innerHTML='<div class="no-data" style="grid-column:1/-1;">Sector data loads when market is open. Showing news-based signals below.</div>';
+    return;
+  }
+
+  // Sort sectors by current period performance
+  const sorted=[...SECTOR_ETFS].filter(s=>sectorData[s.sym]).sort((a,b)=>{
+    return(sectorData[b.sym]?.[sectorPeriod]||0)-(sectorData[a.sym]?.[sectorPeriod]||0);
+  });
+
+  el.innerHTML=sorted.map(sec=>{
+    const d=sectorData[sec.sym];
+    if(!d) return '';
+    const pct=d[sectorPeriod];
+    // Color: deep green for high positive, deep red for negative
+    const intensity=Math.min(Math.abs(pct)/15,1);
+    const bg=pct>=0
+      ?`rgba(34,197,94,${0.1+intensity*0.4})`
+      :`rgba(239,68,68,${0.1+intensity*0.4})`;
+    const textColor=pct>=0?'var(--green)':'var(--red)';
+    return`<div class="sector-cell" style="background:${bg}">
+      <div class="sector-cell-name">${sec.name}</div>
+      <div class="sector-cell-etf">${sec.sym}</div>
+      <div class="sector-cell-pct" style="color:${textColor}">${pct>=0?'+':''}${pct.toFixed(1)}%</div>
+    </div>`;
+  }).join('');
+}
+
+async function fetchSmartMoney(){
+  const results=await Promise.allSettled(SMART_MONEY_FEEDS.map(async feed=>{
+    try{
+      const resp=await fetchTimeout(RSS2JSON+encodeURIComponent(feed.url),15000);
+      if(!resp.ok) throw 0;
+      const data=await resp.json();
+      if(data.status==='ok'&&data.items){
+        return data.items.map(item=>({
+          title:cleanText(item.title||''),
+          description:cleanText((item.description||'').substring(0,500)),
+          link:item.link||'',
+          source:feed.name,
+          type:feed.type,
+          timestamp:item.pubDate?new Date(item.pubDate).getTime():Date.now(),
+        }));
+      }
+    }catch(e){}
+    return[];
+  }));
+
+  smartMoneyItems=[];
+  results.forEach(r=>{if(r.status==='fulfilled')smartMoneyItems=smartMoneyItems.concat(r.value);});
+  smartMoneyItems.sort((a,b)=>b.timestamp-a.timestamp);
+  renderSmartMoney();
+}
+
+function renderSmartMoney(){
+  const el=document.getElementById('smartMoneyFeed');
+  const insiderCount=smartMoneyItems.filter(i=>i.type==='insider').length;
+  const f13Count=smartMoneyItems.filter(i=>i.type==='13f').length;
+  const flowCount=smartMoneyItems.filter(i=>i.type==='flow').length;
+  const accumCount=smartMoneyItems.filter(i=>i.type==='accum').length;
+
+  document.getElementById('smInsider').textContent=insiderCount;
+  document.getElementById('sm13f').textContent=f13Count;
+  document.getElementById('smFlows').textContent=flowCount;
+  document.getElementById('smAccum').textContent=accumCount;
+
+  if(!smartMoneyItems.length){
+    el.innerHTML='<div class="no-data">No smart money signals yet...</div>';
+    renderEarlyInnings([]);
+    return;
+  }
+
+  // Show top items
+  el.innerHTML=smartMoneyItems.slice(0,12).map(item=>{
+    const typeClass=item.type==='insider'?'insider':item.type==='13f'?'inst':item.type==='flow'?'flow':'accum';
+    const typeLabel=item.type==='insider'?'INSIDER BUY':item.type==='13f'?'13F FILING':item.type==='flow'?'FUND FLOW':'ACCUMULATION';
+    const typeBadge=item.type==='insider'?'sm-type-insider':item.type==='13f'?'sm-type-13f':item.type==='flow'?'sm-type-flow':'sm-type-accum';
+    const tickers=extractTickers(item.title+' '+item.description);
+    const time=formatTime(item.timestamp);
+
+    return`<div class="sm-card ${typeClass}">
+      <div class="sm-card-header">
+        <span class="sm-card-type ${typeBadge}">${typeLabel}</span>
+        <span class="sm-card-time">${time}</span>
+      </div>
+      <div class="sm-card-text">${item.link?`<a href="${item.link}" target="_blank">${item.title}</a>`:item.title}</div>
+      ${tickers.length?`<div class="sm-card-tickers">${tickers.slice(0,5).map(t=>`<span class="sm-ticker-tag">${t}</span>`).join('')}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // Build early innings from smart money ticker analysis
+  buildEarlyInnings();
+}
+
+function buildEarlyInnings(){
+  // Find tickers that appear across MULTIPLE smart money signal types
+  const tickerSignals={};
+
+  smartMoneyItems.forEach(item=>{
+    const tickers=extractTickers(item.title+' '+item.description);
+    tickers.forEach(t=>{
+      if(!tickerSignals[t])tickerSignals[t]={ticker:t,types:new Set(),mentions:0,headlines:[],sources:new Set()};
+      const m=tickerSignals[t];
+      m.types.add(item.type);
+      m.sources.add(item.source);
+      m.mentions++;
+      if(m.headlines.length<3)m.headlines.push(item.title.substring(0,70));
+    });
+  });
+
+  // Score: more signal types = stronger convergence
+  let picks=Object.values(tickerSignals).map(m=>{
+    m.convergence=m.types.size;
+    m.score=m.convergence*10+m.mentions*2;
+    m.types=[...m.types];
+    return m;
+  });
+
+  // Filter: need at least 2 mentions, prefer multi-type convergence
+  picks=picks.filter(p=>p.mentions>=2).sort((a,b)=>b.score-a.score).slice(0,8);
+  renderEarlyInnings(picks);
+}
+
+function renderEarlyInnings(picks){
+  const el=document.getElementById('earlyInnings');
+  if(!picks.length){
+    el.innerHTML='<div class="no-data">Looking for stocks with multiple institutional signals converging...</div>';
+    return;
+  }
+
+  el.innerHTML=picks.map(p=>{
+    const typeTags=p.types.map(t=>{
+      const cls=t==='insider'?'sm-type-insider':t==='13f'?'sm-type-13f':t==='flow'?'sm-type-flow':'sm-type-accum';
+      const lbl=t==='insider'?'INSIDER':t==='13f'?'13F':t==='flow'?'FLOW':'ACCUM';
+      return`<span class="sm-card-type ${cls}">${lbl}</span>`;
+    }).join(' ');
+    const strength=p.convergence>=3?'HIGH':p.convergence>=2?'MEDIUM':'LOW';
+    const strengthColor=p.convergence>=3?'var(--green)':p.convergence>=2?'var(--yellow)':'var(--text-muted)';
+
+    return`<div class="sm-card" style="border-left:3px solid ${strengthColor}">
+      <div class="sm-card-header">
+        <span style="font-weight:800;font-size:15px;color:var(--cyan)">${p.ticker}</span>
+        <span style="font-size:9px;font-weight:700;color:${strengthColor}">${strength} CONVICTION</span>
+      </div>
+      <div style="display:flex;gap:4px;margin:4px 0;flex-wrap:wrap;align-items:center;">
+        ${typeTags}
+        <span style="font-size:9px;color:var(--text-muted)">${p.mentions} signals across ${p.types.length} types</span>
+      </div>
+      <div class="screener-mentions">${p.headlines.slice(0,2).map(h=>'&bull; '+h).join('<br>')}</div>
+      <div class="screener-action" style="margin-top:6px;">
+        <button class="screener-btn trade-btn" onclick="executeTrade('${p.ticker}','BUY','Early innings: ${strength} conviction, ${p.types.length} signal types','early_${p.ticker}')">PAPER BUY $100</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
 //  MOMENTUM SCREENER ENGINE
 // ══════════════════════════════════════
 const KNOWN_TICKERS=new Set(['AAPL','MSFT','GOOGL','GOOG','AMZN','NVDA','META','TSLA','BRK','JPM','JNJ','UNH','V','XOM','PG','MA','HD','CVX','MRK','ABBV','LLY','PEP','KO','COST','AVGO','TMO','MCD','WMT','CSCO','ACN','ABT','CRM','DHR','NKE','TXN','NEE','BMY','UPS','PM','MS','INTC','AMD','QCOM','INTU','AMGN','IBM','GE','CAT','BA','HON','GS','BLK','ISRG','AXP','MDT','SYK','GILD','MMM','ADI','LRCX','REGN','ZTS','BKNG','CME','CI','CB','SCHW','PYPL','SQ','SHOP','ROKU','SNAP','PINS','PLTR','COIN','SOFI','RIVN','LCID','NIO','XPEV','LI','BABA','JD','PDD','SE','GRAB','MELI','NU','RBLX','U','DKNG','PENN','WYNN','LVS','MGM','ABNB','UBER','LYFT','DASH','HOOD','AFRM','UPST','MARA','RIOT','MSTR','CLSK','HUT','GME','AMC','BBBY','BB','NOK','WISH','CLOV','SOFI','OPEN','SPCE','PLTR','PALANTIR','AI','SMCI','ARM','CRWD','PANW','ZS','NET','DDOG','SNOW','MDB','CFLT','PATH','NFLX','DIS','CMCSA','WBD','PARA','SPOT','TTD','ROKU','CRWD','PANW','ZS','FTNT','OKTA','MNDY','TEAM','TWLO','DOCU','ZM','ORCL','NOW','WDAY','VEEV','BILL','HUBS','FIVN','ESTC','CRSP','EDIT','NTLA','BEAM','EXAS','DXCM','ALGN','PODD','INSP','IRTC','LNTH','SMMT','AXON','TER','ON','MCHP','SWKS','WOLF','ENPH','SEDG','FSLR','RUN','MAXN','ARRY','SPWR','OXY','DVN','FANG','MPC','VLO','PSX','PXD','EOG','SLB','HAL','BKR','CLF','X','NUE','STLD','AA','FCX','VALE','RIO','BHP','GOLD','NEM','FNV','WPM','GDX','SLV','GLD','USO','UNG','XLE','XLF','XLK','XLV','XLI','XLY','XLP','XLU','XLRE','XLB','SPY','QQQ','IWM','DIA','UVXY','VXX','SQQQ','TQQQ','ARKK','ARKG','ARKF','ARKW','JETS','TAN','LIT','ICLN','KWEB','FXI','EEM','EWZ','EWG','VNQ','TLT','HYG','LQD','UUP','FXE','GDX','GDXJ','XOP','OIH','KRE','SMH','SOXX','XBI','IBB','XHB','ITB','IYT','XRT','HACK','BOTZ','ROBO','SKYY','CLOU','WCLD','CIBR','FINX','BUG','URA','URNM','LMT','RTX','NOC','GD','HII','KTOS','DFEN','ITA','F','GM','TM','STLA','RACE','LCID','RIVN','FSR','WKHS','GOEV','REE','LAZR','VLDR','LIDR','MVIS','IONQ','RGTI','QUBT','QBTS','IRM','DLR','EQIX','AMT','CCI','SBAC']);
@@ -1021,6 +1313,7 @@ loadPortfolio();
 if(portfolio.autoTrade){const b=document.getElementById('autoTradeBtn');b.textContent='ON';b.classList.add('active-green');}
 updateClock();setInterval(updateClock,1000);
 fetchAllNews();fetchMarketData();fetchForexCalendar();fetchScreenerFeeds();
+fetchSmartMoney();fetchSectorRotation();
 renderPortfolio();
 // Retry any pending trades from previous session
 setTimeout(()=>{if(portfolio.pendingQueue.length)retryPendingTrades();},5000);
@@ -1028,6 +1321,8 @@ setInterval(fetchAllNews,120000);       // News every 2 min
 setInterval(fetchMarketData,60000);     // Prices every 1 min
 setInterval(fetchForexCalendar,300000); // Calendar every 5 min
 setInterval(fetchScreenerFeeds,300000); // Screener every 5 min
+setInterval(fetchSmartMoney,300000);    // Smart money every 5 min
+setInterval(fetchSectorRotation,600000);// Sector rotation every 10 min
 // Update portfolio values + retry pending trades every 2 min
 setInterval(async()=>{
   for(const t of Object.keys(portfolio.positions)){await getPrice(t);}
