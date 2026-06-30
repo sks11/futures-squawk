@@ -570,7 +570,6 @@
 const FEEDS=[
   {name:'CNBC',url:'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114'},
   {name:'MarketWatch',url:'https://feeds.marketwatch.com/marketwatch/topstories/'},
-  {name:'WSJ Mkts',url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml'},
   {name:'G-News Mkt',url:'https://news.google.com/rss/search?q=stock+market+OR+futures+OR+wall+street&hl=en-US&gl=US&ceid=US:en'},
   {name:'G-News Geo',url:'https://news.google.com/rss/search?q=geopolitical+OR+iran+OR+china+trade+OR+sanctions&hl=en-US&gl=US&ceid=US:en'},
 ];
@@ -1622,9 +1621,9 @@ async function fetchFeed(feed){
 async function fetchAllNews(){
   setStatus('Fetching...');
   const[nR,tR]=await Promise.all([Promise.allSettled(FEEDS.map(f=>fetchFeed(f))),Promise.allSettled(TRUMP_FEEDS.map(f=>fetchFeed(f)))]);
-  let nc=0,tn=false;
-  nR.forEach(r=>{if(r.status!=='fulfilled'||!r.value)return;r.value.forEach(item=>{if(!item.title||seenIds.has(item.id))return;seenIds.add(item.id);item.time=formatTime(item.timestamp);item.category=classify(item.title+' '+item.description);item.sentiment=sentiment(item.title+' '+item.description);headlines.unshift(item);nc++;if(item.category==='trump')tn=true;});});
-  tR.forEach(r=>{if(r.status!=='fulfilled'||!r.value)return;r.value.forEach(item=>{if(!item.title)return;if(!seenIds.has(item.id)){seenIds.add(item.id);item.time=formatTime(item.timestamp);item.category='trump';item.sentiment=sentiment(item.title+' '+item.description);headlines.unshift(item);nc++;tn=true;}if(!seenTrumpIds.has(item.id)&&isTrumpStatement(item.title)){seenTrumpIds.add(item.id);item.time=formatTime(item.timestamp);item.sentiment=sentiment(item.title+' '+item.description);trumpPosts.unshift(item);}});});
+  let nc=0,tn=false;const staleCutoff=Date.now()-12096e5;/* drop items older than 14 days (dead/frozen feeds) */
+  nR.forEach(r=>{if(r.status!=='fulfilled'||!r.value)return;r.value.forEach(item=>{if(!item.title||seenIds.has(item.id)||item.timestamp<staleCutoff)return;seenIds.add(item.id);item.time=formatTime(item.timestamp);item.category=classify(item.title+' '+item.description);item.sentiment=sentiment(item.title+' '+item.description);headlines.unshift(item);nc++;if(item.category==='trump')tn=true;});});
+  tR.forEach(r=>{if(r.status!=='fulfilled'||!r.value)return;r.value.forEach(item=>{if(!item.title||item.timestamp<staleCutoff)return;if(!seenIds.has(item.id)){seenIds.add(item.id);item.time=formatTime(item.timestamp);item.category='trump';item.sentiment=sentiment(item.title+' '+item.description);headlines.unshift(item);nc++;tn=true;}if(!seenTrumpIds.has(item.id)&&isTrumpStatement(item.title)){seenTrumpIds.add(item.id);item.time=formatTime(item.timestamp);item.sentiment=sentiment(item.title+' '+item.description);trumpPosts.unshift(item);}});});
   headlines.sort((a,b)=>b.timestamp-a.timestamp);trumpPosts.sort((a,b)=>b.timestamp-a.timestamp);
   if(headlines.length>200)headlines=headlines.slice(0,200);if(trumpPosts.length>50)trumpPosts=trumpPosts.slice(0,50);
   if(audioEnabled){if(tn)playTrumpAlert();else if(nc>0)playAlertSound();}
