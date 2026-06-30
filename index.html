@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FUTURES SQUAWK - Real-Time Market Intelligence</title>
+<title>TradePulse AI — Real-Time Market Intelligence</title>
 <style>
   :root {
-    --bg-primary:#0a0e17; --bg-secondary:#111827; --bg-card:#1a2035; --bg-hover:#1f2a42;
-    --border:#2a3550; --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b;
-    --green:#22c55e; --red:#ef4444; --yellow:#eab308; --blue:#3b82f6;
-    --purple:#a855f7; --orange:#f97316; --cyan:#06b6d4;
+    --bg-primary:#f3f6fc; --bg-secondary:#ffffff; --bg-card:#ffffff; --bg-hover:#eef2fa;
+    --border:#e2e8f3; --text-primary:#1d2740; --text-secondary:#586781; --text-muted:#93a1bb;
+    --green:#12a05a; --red:#e23744; --yellow:#c8870a; --blue:#2f6df0;
+    --purple:#8b5cf6; --orange:#e3760f; --cyan:#0e93b3;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'SF Mono','Fira Code','Cascadia Code','Consolas',monospace;background:var(--bg-primary);color:var(--text-primary);font-size:13px;overflow:hidden;height:100vh;}
+  body{font-family:'SF Mono','Fira Code','Cascadia Code','Consolas',monospace;background:radial-gradient(1100px 560px at 78% -10%,rgba(47,109,240,0.07),transparent 60%),radial-gradient(900px 500px at 8% 0%,rgba(14,147,179,0.06),transparent 55%),var(--bg-primary);color:var(--text-primary);font-size:14.5px;overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased;}
 
-  .header{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg-secondary);border-bottom:1px solid var(--border);}
+  .header{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:var(--bg-secondary);border-bottom:1px solid var(--border);box-shadow:0 1px 10px rgba(29,39,64,0.06);}
   .header-left{display:flex;align-items:center;gap:12px;}
   .status-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;}
   .status-dot.error{background:var(--red);box-shadow:0 0 8px var(--red);}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-  .logo{font-size:16px;font-weight:800;letter-spacing:1px;}.logo span{color:var(--yellow);}
-  .subtitle{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;}
+  .logo{font-size:20px;font-weight:800;letter-spacing:1.5px;}.logo span{color:var(--orange);}
+  .subtitle{font-size:10.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:2.5px;}
   .header-right{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-secondary);}
   .headline-count{color:var(--cyan);}
   .btn-sm{background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px;}
@@ -33,7 +33,7 @@
   .ticker-bar{display:flex;align-items:center;gap:2px;padding:6px 16px;background:var(--bg-secondary);border-bottom:1px solid var(--border);overflow-x:auto;}
   .ticker-item{display:flex;align-items:center;gap:8px;padding:4px 12px;white-space:nowrap;border-right:1px solid var(--border);}
   .ticker-item:last-child{border-right:none;}
-  .ticker-symbol{font-weight:700;font-size:12px;}.ticker-price{font-weight:600;font-size:13px;}.ticker-change{font-size:11px;font-weight:600;}
+  .ticker-symbol{font-weight:700;font-size:14px;}.ticker-price{font-weight:600;font-size:15px;}.ticker-change{font-size:12.5px;font-weight:600;}
   .up{color:var(--green);}.down{color:var(--red);}.flat{color:var(--text-muted);}
 
   .sentiment-bar{display:flex;align-items:center;padding:6px 16px;background:var(--bg-primary);border-bottom:1px solid var(--border);gap:16px;font-size:11px;}
@@ -46,51 +46,54 @@
   .risk-block.r{background:var(--red);border-color:var(--red);}
 
   .filter-bar{display:flex;align-items:center;padding:6px 16px;gap:6px;background:var(--bg-primary);border-bottom:1px solid var(--border);flex-wrap:wrap;}
-  .filter-tab{padding:5px 14px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;border:1px solid transparent;font-family:inherit;}
-  .filter-tab.trump{background:#7c2d12;color:#fb923c;}.filter-tab.trump:hover,.filter-tab.trump.active{background:#9a3412;border-color:#fb923c;}
-  .filter-tab.fed{background:#1e3a5f;color:#60a5fa;}.filter-tab.fed:hover,.filter-tab.fed.active{background:#1e40af;border-color:#60a5fa;}
-  .filter-tab.econ{background:#365314;color:#86efac;}.filter-tab.econ:hover,.filter-tab.econ.active{background:#3f6212;border-color:#86efac;}
-  .filter-tab.geopolitical{background:#4c1d95;color:#c4b5fd;}.filter-tab.geopolitical:hover,.filter-tab.geopolitical.active{background:#5b21b6;border-color:#c4b5fd;}
-  .filter-tab.earnings{background:#713f12;color:#fde047;}.filter-tab.earnings:hover,.filter-tab.earnings.active{background:#854d0e;border-color:#fde047;}
-  .filter-tab.overall{background:var(--bg-card);color:var(--text-secondary);}.filter-tab.overall:hover,.filter-tab.overall.active{background:var(--bg-hover);border-color:var(--text-secondary);}
+  .filter-tab{padding:7px 16px;border-radius:6px;font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:all 0.15s;}
+  .filter-tab.trump{background:rgba(227,118,15,0.12);color:#c25e08;}.filter-tab.trump:hover,.filter-tab.trump.active{background:rgba(227,118,15,0.2);border-color:#e3760f;}
+  .filter-tab.fed{background:rgba(47,109,240,0.1);color:#2b62d6;}.filter-tab.fed:hover,.filter-tab.fed.active{background:rgba(47,109,240,0.18);border-color:#2f6df0;}
+  .filter-tab.econ{background:rgba(18,160,90,0.12);color:#0f8a4d;}.filter-tab.econ:hover,.filter-tab.econ.active{background:rgba(18,160,90,0.2);border-color:#12a05a;}
+  .filter-tab.geopolitical{background:rgba(139,92,246,0.12);color:#7c3aed;}.filter-tab.geopolitical:hover,.filter-tab.geopolitical.active{background:rgba(139,92,246,0.2);border-color:#8b5cf6;}
+  .filter-tab.earnings{background:rgba(200,135,10,0.14);color:#a8730a;}.filter-tab.earnings:hover,.filter-tab.earnings.active{background:rgba(200,135,10,0.22);border-color:#c8870a;}
+  .filter-tab.overall{background:var(--bg-hover);color:var(--text-secondary);}.filter-tab.overall:hover,.filter-tab.overall.active{background:#e3e9f4;border-color:var(--text-muted);}
   .clear-filters{margin-left:auto;font-size:11px;color:var(--text-muted);cursor:pointer;border:none;background:none;font-family:inherit;}
 
-  .main{display:grid;grid-template-columns:1fr 400px;height:calc(100vh - 158px);overflow:hidden;}
+  .disclaimer-bar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;padding:6px 16px;background:rgba(227,118,15,0.09);border-bottom:1px solid var(--border);font-size:11.5px;color:var(--text-secondary);text-align:center;line-height:1.3;}
+  .disclaimer-bar strong{color:#c25e08;font-weight:700;}
+
+  .main{display:grid;grid-template-columns:1fr 420px;height:calc(100vh - 204px);overflow:hidden;}
 
   .news-feed{overflow-y:auto;}
   .news-feed::-webkit-scrollbar{width:6px;}.news-feed::-webkit-scrollbar-track{background:var(--bg-primary);}.news-feed::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-  .news-header{display:grid;grid-template-columns:70px 80px 100px 90px 1fr;gap:10px;padding:6px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);border-bottom:2px solid var(--border);background:var(--bg-secondary);position:sticky;top:0;z-index:10;}
-  .news-item{display:grid;grid-template-columns:70px 80px 100px 90px 1fr;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);}
+  .news-header{display:grid;grid-template-columns:78px 92px 108px 96px 1fr;gap:12px;padding:9px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);border-bottom:2px solid var(--border);background:var(--bg-secondary);position:sticky;top:0;z-index:10;}
+  .news-item{display:grid;grid-template-columns:78px 92px 108px 96px 1fr;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--border);}
   .news-item:hover{background:var(--bg-hover);}
   .news-item.trump-alert{background:rgba(249,115,22,0.12);border-left:4px solid var(--orange);box-shadow:inset 0 0 30px rgba(249,115,22,0.06);position:relative;}
   .news-item.trump-alert::before{content:"TRUMP";position:absolute;top:2px;right:8px;font-size:8px;font-weight:800;color:#fb923c;background:rgba(124,45,18,0.8);padding:1px 6px;border-radius:2px;letter-spacing:1px;animation:trumpPulse 2s infinite;}
-  .news-item.trump-alert .news-headline{color:#fed7aa;font-weight:600;}
+  .news-item.trump-alert .news-headline{color:#9a4a08;font-weight:700;}
   .news-item.trump-new{animation:trumpFlash 4s ease;}
   @keyframes trumpFlash{0%{background:rgba(249,115,22,0.35)}100%{background:rgba(249,115,22,0.12)}}
   @keyframes trumpPulse{0%,100%{opacity:1}50%{opacity:0.6}}
   .news-item.breaking{background:rgba(239,68,68,0.08);border-left:3px solid var(--red);animation:breakingFlash 3s ease;}
   @keyframes breakingFlash{0%{background:rgba(239,68,68,0.2)}100%{background:rgba(239,68,68,0.08)}}
-  .news-time{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums;}
-  .news-source{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .news-category{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:3px;text-align:center;white-space:nowrap;}
-  .cat-trump{background:#7c2d12;color:#fb923c;}.cat-fed{background:#1e3a5f;color:#60a5fa;}.cat-econ{background:#365314;color:#86efac;}.cat-geopolitical{background:#4c1d95;color:#c4b5fd;}.cat-earnings{background:#713f12;color:#fde047;}.cat-general{background:var(--bg-card);color:var(--text-muted);}
-  .news-sentiment{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:3px;text-align:center;}
-  .sent-bullish{background:rgba(34,197,94,0.15);color:var(--green);}.sent-bearish{background:rgba(239,68,68,0.15);color:var(--red);}.sent-neutral{background:rgba(100,116,139,0.15);color:var(--text-muted);}
-  .news-headline{font-size:12px;line-height:1.4;}.news-headline a{color:inherit;text-decoration:none;}.news-headline a:hover{text-decoration:underline;}
+  .news-time{font-size:12px;color:var(--text-secondary);font-variant-numeric:tabular-nums;}
+  .news-source{font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .news-category{font-size:10.5px;font-weight:700;text-transform:uppercase;padding:3px 8px;border-radius:4px;text-align:center;white-space:nowrap;}
+  .cat-trump{background:rgba(227,118,15,0.14);color:#c25e08;}.cat-fed{background:rgba(47,109,240,0.12);color:#2b62d6;}.cat-econ{background:rgba(18,160,90,0.14);color:#0f8a4d;}.cat-geopolitical{background:rgba(139,92,246,0.14);color:#7c3aed;}.cat-earnings{background:rgba(200,135,10,0.16);color:#a8730a;}.cat-general{background:var(--bg-hover);color:var(--text-secondary);}
+  .news-sentiment{font-size:10.5px;font-weight:700;text-transform:uppercase;padding:3px 8px;border-radius:4px;text-align:center;}
+  .sent-bullish{background:rgba(46,224,138,0.16);color:var(--green);}.sent-bearish{background:rgba(255,90,106,0.16);color:var(--red);}.sent-neutral{background:rgba(118,137,166,0.15);color:var(--text-muted);}
+  .news-headline{font-size:14.5px;line-height:1.45;color:var(--text-primary);}.news-headline a{color:inherit;text-decoration:none;}.news-headline a:hover{text-decoration:underline;color:#fff;}
 
   .sidebar{border-left:1px solid var(--border);overflow-y:hidden;display:flex;flex-direction:column;}
 
   /* ── Sidebar Tabs ── */
   .sidebar-tabs{display:flex;background:var(--bg-secondary);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch;}
   .sidebar-tabs::-webkit-scrollbar{height:0;}
-  .sidebar-tab{flex:0 0 auto;padding:8px 10px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;}
+  .sidebar-tab{flex:0 0 auto;padding:10px 13px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;}
   .sidebar-tab:hover{color:var(--text-primary);background:var(--bg-hover);}
   .sidebar-tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
   .sidebar-panel{display:none;overflow-y:auto;flex:1;}
   .sidebar-panel.active{display:flex;flex-direction:column;}
   .sidebar-panel::-webkit-scrollbar{width:6px;}.sidebar-panel::-webkit-scrollbar-track{background:var(--bg-primary);}.sidebar-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
   .sidebar-section{padding:12px;border-bottom:1px solid var(--border);}
-  .sidebar-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .sidebar-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
   .sidebar-title .count{font-size:10px;color:var(--orange);margin-left:auto;}
 
   /* ── Trump Feed ── */
@@ -102,22 +105,22 @@
   .trump-post-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
   .trump-post-source{font-size:9px;color:var(--orange);font-weight:700;text-transform:uppercase;}
   .trump-post-time{font-size:9px;color:var(--text-muted);}
-  .trump-post-text{font-size:11px;color:#fed7aa;line-height:1.5;}
-  .trump-post-text a{color:#fb923c;text-decoration:none;}.trump-post-text a:hover{text-decoration:underline;}
+  .trump-post-text{font-size:12.5px;color:#7a4310;line-height:1.5;}
+  .trump-post-text a{color:#c25e08;text-decoration:none;}.trump-post-text a:hover{text-decoration:underline;}
   .trump-post-sentiment{display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;margin-top:4px;}
 
   /* ── Signal Cards ── */
-  .signal-card{padding:10px;margin-bottom:6px;border-radius:4px;background:var(--bg-card);position:relative;}
+  .signal-card{padding:12px;margin-bottom:8px;border-radius:8px;background:var(--bg-card);position:relative;border:1px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,0.25);}
   .signal-card.buy{border-left:4px solid var(--green);}.signal-card.sell{border-left:4px solid var(--red);}.signal-card.hold{border-left:4px solid var(--yellow);}
   .signal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
-  .signal-ticker{font-weight:800;font-size:15px;color:var(--cyan);}
+  .signal-ticker{font-weight:800;font-size:17px;color:var(--cyan);}
   .signal-action{font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;letter-spacing:1px;}
   .signal-action.buy-tag{background:rgba(34,197,94,0.25);color:var(--green);}.signal-action.sell-tag{background:rgba(239,68,68,0.25);color:var(--red);}.signal-action.hold-tag{background:rgba(234,179,8,0.25);color:var(--yellow);}
   .signal-urgency{font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;margin-left:6px;}
   .urgency-asap{background:rgba(239,68,68,0.3);color:var(--red);animation:urgencyBlink 1.5s infinite;}
   .urgency-soon{background:rgba(249,115,22,0.3);color:var(--orange);}.urgency-watch{background:rgba(100,116,139,0.3);color:var(--text-muted);}
   @keyframes urgencyBlink{0%,100%{opacity:1}50%{opacity:0.5}}
-  .signal-reason{font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;}
+  .signal-reason{font-size:12px;color:var(--text-secondary);line-height:1.45;margin-bottom:4px;}
   .signal-trigger{font-size:9px;color:var(--text-muted);font-style:italic;border-top:1px solid var(--border);padding-top:4px;margin-top:4px;}
   .signal-conf{font-size:9px;color:var(--text-muted);display:flex;align-items:center;gap:4px;margin-top:3px;}
   .conf-bar{width:50px;height:4px;background:var(--bg-hover);border-radius:2px;overflow:hidden;}.conf-fill{height:100%;border-radius:2px;}
@@ -326,7 +329,7 @@
 <div class="header">
   <div class="header-left">
     <div class="status-dot" id="statusDot"></div>
-    <div><div class="logo">FUTURES<span>SQUAWK</span></div><div class="subtitle">Real-Time Market Intelligence</div></div>
+    <div><div class="logo">Trade Pulse<span> AI</span></div><div class="subtitle">Real-Time Market Intelligence</div></div>
   </div>
   <div id="clock" style="font-size:12px;color:var(--text-secondary);"></div>
   <div class="header-right">
@@ -336,6 +339,8 @@
     <button class="btn-sm" id="refreshBtn">REFRESH</button>
   </div>
 </div>
+
+<div class="disclaimer-bar">&#9888;&#65039; <strong>Educational use only — not financial advice.</strong>&nbsp;Signals and paper trades are for learning. Markets carry risk; always do your own research.</div>
 
 <div class="ticker-bar" id="tickerBar"><span class="flat" style="font-size:11px;padding:2px;">Loading market data...</span></div>
 
@@ -1760,7 +1765,7 @@ async function sendChat(){
   const topScreener=screenerData.slice(0,5).map(s=>`${s.ticker}: buzz ${s.buzzScore}, ${s.mentions} mentions`).join('\n');
   const positions=Object.entries(portfolio.positions).map(([t,p])=>`${t}: ${p.shares} shares @ $${p.avgPrice.toFixed(2)}`).join(', ');
 
-  const systemPrompt=`You are a stock market analyst AI embedded in a trading dashboard called FuturesSquawk. Be concise, specific, and actionable. Use bullet points. Always mention specific tickers. Give a clear BUY/SELL/HOLD opinion when asked. Include risk warnings.
+  const systemPrompt=`You are a stock market analyst AI embedded in a trading dashboard called Trade Pulse AI. Be concise, specific, and actionable. Use bullet points. Always mention specific tickers. Give a clear BUY/SELL/HOLD opinion when asked. Include risk warnings.
 
 CURRENT DASHBOARD DATA:
 Recent Headlines:
